@@ -142,7 +142,7 @@ public class Form extends javax.swing.JFrame {
 //        DesktopPane.add(login);
 //        login.show();
 
-        Pegawai dbg = new Pegawai();
+        KenaikanPangkat dbg = new KenaikanPangkat();
         DesktopPane.add(dbg);
         dbg.show();
         

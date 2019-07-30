@@ -5,7 +5,10 @@
  */
 package test.test.Forms;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
@@ -52,7 +55,7 @@ public class KenaikanPangkat extends javax.swing.JInternalFrame {
     public void loadComboBox() {
         ComboPangkatGolBaru.removeAllItems();
         ComboPangkatGolLama.removeAllItems();
-        ComboPangkatGolLama.removeAllItems();
+        ComboPegawai.removeAllItems();
         
         Base.open();
         LazyList<PangkatGolModel> pangkatGols = PangkatGolModel.findAll();
@@ -192,7 +195,7 @@ public class KenaikanPangkat extends javax.swing.JInternalFrame {
         LabelPangkatGol4 = new javax.swing.JLabel();
 
         setClosable(true);
-        setTitle("Pangkat Golongan");
+        setTitle("Kenaikan Pangkat");
 
         ButtonTambahUbah.setText("Tambah");
         ButtonTambahUbah.addActionListener(new java.awt.event.ActionListener() {
@@ -347,6 +350,12 @@ public class KenaikanPangkat extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ButtonTambahUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTambahUbahActionPerformed
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = TMT.getDate();
+        String strDate = dateFormat.format(date);
+        System.out.println(strDate);
+        
 //        if (state.equals("index")) {
 //            if (TextNip.getText().trim().equals("")) {
 //                JOptionPane.showMessageDialog(null, "Form NIP Masih Kosong !!!");

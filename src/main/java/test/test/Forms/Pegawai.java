@@ -165,7 +165,7 @@ public class Pegawai extends javax.swing.JInternalFrame {
         LabelCari = new javax.swing.JLabel();
 
         setClosable(true);
-        setTitle("Pangkat Golongan");
+        setTitle("Pegawai");
 
         ButtonTambahUbah.setText("Tambah");
         ButtonTambahUbah.addActionListener(new java.awt.event.ActionListener() {
@@ -285,6 +285,8 @@ public class Pegawai extends javax.swing.JInternalFrame {
                 .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        getAccessibleContext().setAccessibleName("Pegawai");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
