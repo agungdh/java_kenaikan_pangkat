@@ -1,9 +1,9 @@
 -- mysqldump-php https://github.com/ifsnop/mysqldump-php
 --
--- Host: 127.0.0.1	Database: cilara_test
+-- Host: 127.0.0.1	Database: kenaikan_pangkat
 -- ------------------------------------------------------
--- Server version 	5.5.5-10.1.38-MariaDB
--- Date: Wed, 15 May 2019 11:12:22 +0200
+-- Server version 	5.5.5-10.3.13-MariaDB-2
+-- Date: Tue, 30 Jul 2019 13:22:56 +0700
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -17,92 +17,162 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `barang`
+-- Table structure for table `usulan`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `barang` (
+CREATE TABLE `usulan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_orang` int(11) NOT NULL,
-  `nama` varchar(191) NOT NULL,
+  `id_pegawai` int(11) NOT NULL,
+  `tanggal` date NOT NULL,
+  `nomor` varchar(25) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_orang` (`id_orang`),
-  CONSTRAINT `barang_ibfk_1` FOREIGN KEY (`id_orang`) REFERENCES `orang` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+  KEY `id_pegawai` (`id_pegawai`),
+  CONSTRAINT `usulan_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `barang`
+-- Dumping data for table `usulan`
 --
 
-LOCK TABLES `barang` WRITE;
-/*!40000 ALTER TABLE `barang` DISABLE KEYS */;
+LOCK TABLES `usulan` WRITE;
+/*!40000 ALTER TABLE `usulan` DISABLE KEYS */;
 SET autocommit=0;
-/*!40000 ALTER TABLE `barang` ENABLE KEYS */;
+/*!40000 ALTER TABLE `usulan` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `barang` with 0 row(s)
+-- Dumped table `usulan` with 0 row(s)
 --
 
 --
--- Table structure for table `orang`
+-- Table structure for table `gaji_berkala`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `orang` (
+CREATE TABLE `gaji_berkala` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tmt` date NOT NULL,
+  `yad` date NOT NULL,
+  `id_pegawai` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_pegawai` (`id_pegawai`),
+  CONSTRAINT `gaji_berkala_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `gaji_berkala`
+--
+
+LOCK TABLES `gaji_berkala` WRITE;
+/*!40000 ALTER TABLE `gaji_berkala` DISABLE KEYS */;
+SET autocommit=0;
+/*!40000 ALTER TABLE `gaji_berkala` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+
+-- Dumped table `gaji_berkala` with 0 row(s)
+--
+
+--
+-- Table structure for table `kenaikan_pangkat`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `kenaikan_pangkat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tmt` date NOT NULL,
+  `yad` date NOT NULL,
+  `id_pegawai` int(11) NOT NULL,
+  `id_pangkat_lama` int(11) NOT NULL,
+  `id_pangkat_baru` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_pegawai` (`id_pegawai`),
+  KEY `id_pangkat_baru` (`id_pangkat_baru`),
+  KEY `id_pangkat_lama` (`id_pangkat_lama`),
+  CONSTRAINT `kenaikan_pangkat_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`),
+  CONSTRAINT `kenaikan_pangkat_ibfk_2` FOREIGN KEY (`id_pangkat_baru`) REFERENCES `pangkatgol` (`id`),
+  CONSTRAINT `kenaikan_pangkat_ibfk_3` FOREIGN KEY (`id_pangkat_lama`) REFERENCES `pangkatgol` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `kenaikan_pangkat`
+--
+
+LOCK TABLES `kenaikan_pangkat` WRITE;
+/*!40000 ALTER TABLE `kenaikan_pangkat` DISABLE KEYS */;
+SET autocommit=0;
+/*!40000 ALTER TABLE `kenaikan_pangkat` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+
+-- Dumped table `kenaikan_pangkat` with 0 row(s)
+--
+
+--
+-- Table structure for table `pegawai`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pegawai` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nip` varchar(191) NOT NULL,
   `nama` varchar(191) NOT NULL,
-  `alamat` varchar(191) NOT NULL,
+  `id_pangkatgol` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_pangkatgol` (`id_pangkatgol`),
+  CONSTRAINT `pegawai_ibfk_1` FOREIGN KEY (`id_pangkatgol`) REFERENCES `pangkatgol` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pegawai`
+--
+
+LOCK TABLES `pegawai` WRITE;
+/*!40000 ALTER TABLE `pegawai` DISABLE KEYS */;
+SET autocommit=0;
+INSERT INTO `pegawai` VALUES (20,'1','nama 1',1),(21,'2','nama 2',2),(22,'12','satu dua',1);
+/*!40000 ALTER TABLE `pegawai` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+
+-- Dumped table `pegawai` with 3 row(s)
+--
+
+--
+-- Table structure for table `pangkatgol`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pangkatgol` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pangkatgol` varchar(191) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `orang`
+-- Dumping data for table `pangkatgol`
 --
 
-LOCK TABLES `orang` WRITE;
-/*!40000 ALTER TABLE `orang` DISABLE KEYS */;
+LOCK TABLES `pangkatgol` WRITE;
+/*!40000 ALTER TABLE `pangkatgol` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `orang` VALUES (1,'AgungDH','NGR'),(2,'Bintang','PSW');
-/*!40000 ALTER TABLE `orang` ENABLE KEYS */;
+INSERT INTO `pangkatgol` VALUES (1,'satu 1'),(2,'dua 2');
+/*!40000 ALTER TABLE `pangkatgol` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `orang` with 2 row(s)
---
-
---
--- Table structure for table `user`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(191) NOT NULL,
-  `password` varchar(191) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-SET autocommit=0;
-INSERT INTO `user` VALUES (1,'admin','21232f297a57a5a743894a0e4a801fc3');
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-COMMIT;
-
--- Dumped table `user` with 1 row(s)
+-- Dumped table `pangkatgol` with 2 row(s)
 --
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -114,4 +184,4 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on: Wed, 15 May 2019 11:12:22 +0200
+-- Dump completed on: Tue, 30 Jul 2019 13:22:56 +0700
