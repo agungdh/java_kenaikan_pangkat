@@ -116,15 +116,28 @@ public class KenaikanPangkat extends javax.swing.JInternalFrame {
             PangkatGolModel PangkatGolLama = PangkatGolModel.findById(kenaikanPangkat.getString("id_pangkat_lama"));
             PangkatGolModel PangkatGolBaru = PangkatGolModel.findById(kenaikanPangkat.getString("id_pangkat_baru"));
             
-            model.addRow(new Object[]{
-                pegawai.getId(),
-                pegawai.getString("nip"),
-                pegawai.getString("nama"),
-                PangkatGolLama.getString("pangkatgol"),
-                PangkatGolBaru.getString("pangkatgol"),
-                kenaikanPangkat.getString("tmt"),
-                kenaikanPangkat.getString("yad"),
-            });
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            
+            try {
+                Date tmt = format.parse(kenaikanPangkat.getString("tmt"));
+                Date yad = format.parse(kenaikanPangkat.getString("yad"));
+                
+                SimpleDateFormat parsedFormat = new SimpleDateFormat("dd-MM-YYYY");
+                String parsedtmt = parsedFormat.format(tmt);
+                String parsedyad = parsedFormat.format(yad);
+                
+                model.addRow(new Object[]{
+                    pegawai.getId(),
+                    pegawai.getString("nip"),
+                    pegawai.getString("nama"),
+                    PangkatGolLama.getString("pangkatgol"),
+                    PangkatGolBaru.getString("pangkatgol"),
+                    parsedtmt,
+                    parsedyad,
+                });                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
         }
         
         Base.close();
