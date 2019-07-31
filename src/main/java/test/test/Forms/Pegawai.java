@@ -5,9 +5,12 @@
  */
 package test.test.Forms;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JDesktopPane;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.javalite.activejdbc.Base;
@@ -15,6 +18,7 @@ import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
 import test.test.Models.PegawaiModel;
 import test.test.Models.PangkatGolModel;
+import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -37,6 +41,8 @@ public class Pegawai extends javax.swing.JInternalFrame {
         loadTable();
         
         loadPangkatGol();
+        
+        formatTextInteger();
     }
     
     public void loadPangkatGol() {
@@ -59,17 +65,22 @@ public class Pegawai extends javax.swing.JInternalFrame {
         model.addColumn("NIP");
         model.addColumn("Nama");
         model.addColumn("Pangkat Golongan");
+        model.addColumn("Gaji");
         
         Base.open();
         for(PegawaiModel pegawai : pegawais) {
             PangkatGolModel pangkatGol = pegawai.parent(PangkatGolModel.class);
-            model.addRow(new Object[]{pegawai.getId(), pegawai.getString("nip"), pegawai.getString("nama"), pangkatGol.getString("pangkatgol")});
+            model.addRow(new Object[]{pegawai.getId(), pegawai.getString("nip"), pegawai.getString("nama"), pangkatGol.getString("pangkatgol"), NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(pegawai.getString("gaji_pokok")))});
         }
         Base.close();
         
         TablePegawai.setModel(model);
         
         setState("index");
+    }
+    
+    private void formatTextInteger() {
+       
     }
     
     private void loadTable() {
@@ -116,22 +127,24 @@ public class Pegawai extends javax.swing.JInternalFrame {
         }
     }
     
-    private void tambahData(String nip, String nama) {
+    private void tambahData(String nip, String nama, int gajiPokok) {
         Base.open();
         PegawaiModel pegawai = new PegawaiModel();
         pegawai.set("nip", nip);
         pegawai.set("nama", nama);
         pegawai.set("id_pangkatgol", selectedComboPangkatGolIndex);
+        pegawai.set("gaji_pokok", gajiPokok);
         pegawai.save();
         Base.close();
     }
     
-    private void ubahData(String id, String nip, String nama) {
+    private void ubahData(String id, String nip, String nama, int gajiPokok) {
         Base.open();
         PegawaiModel pegawai = PegawaiModel.findById(id);
         pegawai.set("nip", nip);
         pegawai.set("nama", nama);
         pegawai.set("id_pangkatgol", selectedComboPangkatGolIndex);
+        pegawai.set("gaji_pokok", gajiPokok);
         pegawai.save();
         Base.close();
     }
@@ -139,6 +152,7 @@ public class Pegawai extends javax.swing.JInternalFrame {
     private void resetForm() {
         TextNip.setText("");
         TextNama.setText("");
+        SpinnerGajiPokok.setValue(0);
 //        ComboPangkatGol.setSelectedIndex(0);
     }
 
@@ -163,6 +177,8 @@ public class Pegawai extends javax.swing.JInternalFrame {
         LabelPangkatGol = new javax.swing.JLabel();
         TextCari = new javax.swing.JTextField();
         LabelCari = new javax.swing.JLabel();
+        LabelGajiPokok = new javax.swing.JLabel();
+        SpinnerGajiPokok = new javax.swing.JSpinner();
 
         setClosable(true);
         setTitle("Pegawai");
@@ -223,40 +239,50 @@ public class Pegawai extends javax.swing.JInternalFrame {
 
         LabelCari.setText("Cari (NIP)");
 
+        LabelGajiPokok.setText("Gaji Pokok");
+
+        SpinnerGajiPokok.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                SpinnerGajiPokokKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(LabelNama)
+                    .addComponent(LabelPangkatGol)
+                    .addComponent(LabelNip)
+                    .addComponent(LabelGajiPokok))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(TextNip, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(ComboPangkatGol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(TextNama, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(SpinnerGajiPokok, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(LabelCari, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(TextCari, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(22, 22, 22))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(ButtonTambahUbah)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(ButtonResetHapus)
-                                .addGap(9, 9, 9)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(LabelNama)
-                            .addComponent(LabelPangkatGol)
-                            .addComponent(LabelNip))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(TextNip, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(ComboPangkatGol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(TextNama, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(31, 31, 31))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(LabelCari, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(TextCari, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34))))
+                                .addGap(31, 31, 31)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,7 +299,11 @@ public class Pegawai extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ComboPangkatGol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LabelPangkatGol))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelGajiPokok)
+                    .addComponent(SpinnerGajiPokok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonTambahUbah)
                     .addComponent(ButtonResetHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -286,8 +316,6 @@ public class Pegawai extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        getAccessibleContext().setAccessibleName("Pegawai");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -298,7 +326,7 @@ public class Pegawai extends javax.swing.JInternalFrame {
             } else if (TextNama.getText().trim().equals("")) {
                 JOptionPane.showMessageDialog(null, "Form Nama Masih Kosong !!!");
             } else {
-                tambahData(TextNip.getText(), TextNama.getText());
+                tambahData(TextNip.getText(), TextNama.getText(), Integer.parseInt(SpinnerGajiPokok.getValue().toString()));
                 resetForm();
                 loadTable();
             }
@@ -308,7 +336,7 @@ public class Pegawai extends javax.swing.JInternalFrame {
             } else if (TextNama.getText().trim().equals("")) {
                 JOptionPane.showMessageDialog(null, "Form Nama Masih Kosong !!!");
             } else {
-                ubahData(ID, TextNip.getText(), TextNama.getText());
+                ubahData(ID, TextNip.getText(), TextNama.getText(), Integer.parseInt(SpinnerGajiPokok.getValue().toString()));
                 resetForm();
                 loadTable();
             }
@@ -336,6 +364,7 @@ public class Pegawai extends javax.swing.JInternalFrame {
             TextNip.setText(pegawai.getString("nip"));
             TextNama.setText(pegawai.getString("nama"));
             ComboPangkatGol.setSelectedIndex(comboPangkatGolID.indexOf(Integer.parseInt(pegawai.getString("id_pangkatgol"))));
+            SpinnerGajiPokok.setValue(Integer.parseInt(pegawai.getString("gaji_pokok")));
             
             setState("edit");
         }
@@ -360,16 +389,22 @@ public class Pegawai extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_TextCariActionPerformed
 
+    private void SpinnerGajiPokokKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SpinnerGajiPokokKeyReleased
+        
+    }//GEN-LAST:event_SpinnerGajiPokokKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonResetHapus;
     private javax.swing.JButton ButtonTambahUbah;
     private javax.swing.JComboBox<String> ComboPangkatGol;
     private javax.swing.JLabel LabelCari;
+    private javax.swing.JLabel LabelGajiPokok;
     private javax.swing.JLabel LabelNama;
     private javax.swing.JLabel LabelNip;
     private javax.swing.JLabel LabelPangkatGol;
     private javax.swing.JScrollPane ScrollPane;
+    private javax.swing.JSpinner SpinnerGajiPokok;
     private javax.swing.JTable TablePegawai;
     private javax.swing.JTextField TextCari;
     private javax.swing.JTextField TextNama;

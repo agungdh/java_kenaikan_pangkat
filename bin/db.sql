@@ -3,7 +3,7 @@
 -- Host: 127.0.0.1	Database: kenaikan_pangkat
 -- ------------------------------------------------------
 -- Server version 	5.5.5-10.3.13-MariaDB-2
--- Date: Wed, 31 Jul 2019 09:44:50 +0700
+-- Date: Wed, 31 Jul 2019 10:49:39 +0700
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -58,6 +58,8 @@ CREATE TABLE `gaji_berkala` (
   `tmt` date NOT NULL,
   `yad` date NOT NULL,
   `id_pegawai` int(11) NOT NULL,
+  `gaji_pokok_lama` int(11) NOT NULL,
+  `gaji_pokok_baru` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_pegawai` (`id_pegawai`),
   CONSTRAINT `gaji_berkala_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`)
@@ -126,10 +128,11 @@ CREATE TABLE `pegawai` (
   `nip` varchar(191) NOT NULL,
   `nama` varchar(191) NOT NULL,
   `id_pangkatgol` int(11) NOT NULL,
+  `gaji_pokok` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_pangkatgol` (`id_pangkatgol`),
   CONSTRAINT `pegawai_ibfk_1` FOREIGN KEY (`id_pangkatgol`) REFERENCES `pangkatgol` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,12 +142,12 @@ CREATE TABLE `pegawai` (
 LOCK TABLES `pegawai` WRITE;
 /*!40000 ALTER TABLE `pegawai` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `pegawai` VALUES (20,'1','nama 1',1),(21,'2','nama 2',2),(22,'12','satu dua',1);
+INSERT INTO `pegawai` VALUES (20,'1','nama 1',1,1000),(21,'2','nama 2',2,22000),(22,'12','satu dua',1,3000),(23,'q','qwr',2,300000),(24,'qwe 33','qweq wqe1 44',1,222);
 /*!40000 ALTER TABLE `pegawai` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `pegawai` with 3 row(s)
+-- Dumped table `pegawai` with 5 row(s)
 --
 
 --
@@ -184,4 +187,4 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on: Wed, 31 Jul 2019 09:44:50 +0700
+-- Dump completed on: Wed, 31 Jul 2019 10:49:39 +0700
