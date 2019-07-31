@@ -5,6 +5,8 @@
  */
 package test.test.Forms;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +52,22 @@ public class KenaikanPangkat extends javax.swing.JInternalFrame {
         loadTable();
         
         loadComboBox();
+        
+        ComboPegawai.addActionListener (new ActionListener () {
+            public void actionPerformed(ActionEvent e) {
+                comboPegawaiIndex = ComboPegawai.getSelectedIndex();
+                if (comboPegawaiIndex >= 0) {
+                    selectedComboPegawaiIndex = comboPegawaiID.get(comboPegawaiIndex);
+
+                    Base.open();
+                    PegawaiModel p = PegawaiModel.findById(selectedComboPegawaiIndex);
+                    Base.close();
+
+                    int pangkatLamaIndex = comboPangkatGolBaruID.indexOf(Integer.parseInt(p.get("id_pangkatgol").toString()));
+                    ComboPangkatGolLama.setSelectedIndex(pangkatLamaIndex);
+                }
+            }
+        });
     }
     
     public void loadComboBox() {
@@ -406,14 +424,11 @@ public class KenaikanPangkat extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_TableKenaikanPangkatMouseClicked
 
     private void ComboPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboPegawaiActionPerformed
-//        comboPangkatGolIndex = ComboPegawai.getSelectedIndex();
-//        if (comboPangkatGolIndex >= 0) {
-//            selectedComboPangkatGolIndex = comboPangkatGolID.get(comboPangkatGolIndex);
-//        }
+
     }//GEN-LAST:event_ComboPegawaiActionPerformed
 
     private void ComboPegawaiItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ComboPegawaiItemStateChanged
-        
+
     }//GEN-LAST:event_ComboPegawaiItemStateChanged
 
     private void ComboPangkatGolBaruItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ComboPangkatGolBaruItemStateChanged
