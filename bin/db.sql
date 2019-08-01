@@ -3,7 +3,7 @@
 -- Host: 127.0.0.1	Database: kenaikan_pangkat
 -- ------------------------------------------------------
 -- Server version 	5.5.5-10.3.13-MariaDB-2
--- Date: Wed, 31 Jul 2019 12:53:42 +0700
+-- Date: Thu, 01 Aug 2019 11:32:45 +0700
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -110,12 +110,11 @@ CREATE TABLE `kenaikan_pangkat` (
 LOCK TABLES `kenaikan_pangkat` WRITE;
 /*!40000 ALTER TABLE `kenaikan_pangkat` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `kenaikan_pangkat` VALUES (1,'2019-07-31','2019-07-31',21,2,1),(2,'2019-07-26','2019-07-08',21,2,2);
 /*!40000 ALTER TABLE `kenaikan_pangkat` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `kenaikan_pangkat` with 2 row(s)
+-- Dumped table `kenaikan_pangkat` with 0 row(s)
 --
 
 --
@@ -129,11 +128,14 @@ CREATE TABLE `pegawai` (
   `nip` varchar(191) NOT NULL,
   `nama` varchar(191) NOT NULL,
   `id_pangkatgol` int(11) NOT NULL,
-  `gaji_pokok` int(11) NOT NULL,
+  `tmt_gaji` date NOT NULL,
+  `yad_gaji` date NOT NULL,
+  `tmt_pangkat` date NOT NULL,
+  `yad_pangkat` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_pangkatgol` (`id_pangkatgol`),
   CONSTRAINT `pegawai_ibfk_1` FOREIGN KEY (`id_pangkatgol`) REFERENCES `pangkatgol` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -143,12 +145,11 @@ CREATE TABLE `pegawai` (
 LOCK TABLES `pegawai` WRITE;
 /*!40000 ALTER TABLE `pegawai` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `pegawai` VALUES (20,'1','nama 1',1,1000),(21,'2','nama 2',2,22000),(22,'12','satu dua',1,3000),(23,'q','qwr',2,300000),(24,'qwe 33','qweq wqe1 44',1,222);
 /*!40000 ALTER TABLE `pegawai` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `pegawai` with 5 row(s)
+-- Dumped table `pegawai` with 0 row(s)
 --
 
 --
@@ -188,4 +189,4 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on: Wed, 31 Jul 2019 12:53:42 +0700
+-- Dump completed on: Thu, 01 Aug 2019 11:32:45 +0700
