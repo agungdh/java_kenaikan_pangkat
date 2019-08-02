@@ -238,6 +238,7 @@ public class Pegawai extends javax.swing.JInternalFrame {
         YADPangkat.setText("");
         TMTGaji.setDate(null);
         YADGaji.setText("");
+        ComboPangkatGol.setSelectedIndex(0);
     }
 
     /**
