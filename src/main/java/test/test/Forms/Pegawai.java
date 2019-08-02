@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,9 +63,11 @@ public class Pegawai extends javax.swing.JInternalFrame {
             public void propertyChange(PropertyChangeEvent e){
                 JDateChooser chooser=(JDateChooser)e.getSource();
                 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
-                Calendar calendar = chooser.getCalendar();
-                calendar.add(Calendar.YEAR, 2);
-                YADPangkat.setText(sdf.format(calendar.getTime()));
+                if (chooser.getCalendar() != null) {
+                    Calendar calendar = chooser.getCalendar();
+                    calendar.add(Calendar.YEAR, 2);
+                    YADPangkat.setText(sdf.format(calendar.getTime()));
+                }
             }
         });
 
@@ -72,9 +75,11 @@ public class Pegawai extends javax.swing.JInternalFrame {
             public void propertyChange(PropertyChangeEvent e){
                 JDateChooser chooser=(JDateChooser)e.getSource();
                 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
-                Calendar calendar = chooser.getCalendar();
-                calendar.add(Calendar.YEAR, 4);
-                YADGaji.setText(sdf.format(calendar.getTime()));
+                if (chooser.getCalendar() != null) {
+                    Calendar calendar = chooser.getCalendar();
+                    calendar.add(Calendar.YEAR, 4);
+                    YADGaji.setText(sdf.format(calendar.getTime()));
+                }
             }
         });
         
@@ -96,16 +101,38 @@ public class Pegawai extends javax.swing.JInternalFrame {
     private void loadTableHelper(LazyList<PegawaiModel> pegawais) {
         model = new DefaultTableModel();
         
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        
         model.addColumn("#ID");
         model.addColumn("NIP");
         model.addColumn("Nama");
         model.addColumn("Pangkat Golongan");
-//        model.addColumn("Gaji");
+        model.addColumn("TMT Pangkat");
+        model.addColumn("YAD Pangkat");
+        model.addColumn("TMT Gaji");
+        model.addColumn("YAD Gaji");
         
         Base.open();
-        for(PegawaiModel pegawai : pegawais) {
-            PangkatGolModel pangkatGol = pegawai.parent(PangkatGolModel.class);
-            model.addRow(new Object[]{pegawai.getId(), pegawai.getString("nip"), pegawai.getString("nama"), pangkatGol.getString("pangkatgol")});
+        try {
+
+            for(PegawaiModel pegawai : pegawais) {
+                Date tmtpangkat = format.parse(pegawai.getString("tmt_pangkat"));
+                Date yadpangkat = format.parse(pegawai.getString("yad_pangkat"));
+                Date tmtgaji = format.parse(pegawai.getString("tmt_gaji"));
+                Date yadgaji = format.parse(pegawai.getString("yad_gaji"));
+                
+                SimpleDateFormat parsedFormat = new SimpleDateFormat("dd-MM-YYYY");
+                
+                String parsedtmtpangkat = parsedFormat.format(tmtpangkat);    
+                String parsedyadpangkat = parsedFormat.format(yadpangkat);    
+                String parsedtmtgaji = parsedFormat.format(tmtgaji);    
+                String parsedyadgaji = parsedFormat.format(yadgaji);    
+                
+                PangkatGolModel pangkatGol = pegawai.parent(PangkatGolModel.class);
+                model.addRow(new Object[]{pegawai.getId(), pegawai.getString("nip"), pegawai.getString("nama"), pangkatGol.getString("pangkatgol"), parsedtmtpangkat, parsedyadpangkat,parsedtmtgaji, parsedyadgaji});
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
         Base.close();
         
@@ -163,32 +190,54 @@ public class Pegawai extends javax.swing.JInternalFrame {
     }
     
     private void tambahData(String nip, String nama) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat parsedFormat = new SimpleDateFormat("yyyy-MM-dd");
         Base.open();
-        PegawaiModel pegawai = new PegawaiModel();
-        pegawai.set("nip", nip);
-        pegawai.set("nama", nama);
-        pegawai.set("id_pangkatgol", selectedComboPangkatGolIndex);
-//        pegawai.set("gaji_pokok", gajiPokok);
-        pegawai.save();
+        try {
+            PegawaiModel pegawai = new PegawaiModel();
+            pegawai.set("nip", nip);
+            pegawai.set("nama", nama);
+            pegawai.set("id_pangkatgol", selectedComboPangkatGolIndex);
+            pegawai.set("tmt_pangkat", dateFormat.format(TMTPangkat.getDate()));
+            pegawai.set("yad_pangkat", parsedFormat.format(format.parse(YADPangkat.getText())));
+            pegawai.set("tmt_gaji", dateFormat.format(TMTGaji.getDate()));
+            pegawai.set("yad_gaji", parsedFormat.format(format.parse(YADGaji.getText())));
+            pegawai.save();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
         Base.close();
     }
     
     private void ubahData(String id, String nip, String nama) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat parsedFormat = new SimpleDateFormat("yyyy-MM-dd");
         Base.open();
-        PegawaiModel pegawai = PegawaiModel.findById(id);
-        pegawai.set("nip", nip);
-        pegawai.set("nama", nama);
-        pegawai.set("id_pangkatgol", selectedComboPangkatGolIndex);
-//        pegawai.set("gaji_pokok", gajiPokok);
-        pegawai.save();
+        try {
+            PegawaiModel pegawai = PegawaiModel.findById(id);
+            pegawai.set("nip", nip);
+            pegawai.set("nama", nama);
+            pegawai.set("id_pangkatgol", selectedComboPangkatGolIndex);
+            pegawai.set("tmt_pangkat", dateFormat.format(TMTPangkat.getDate()));
+            pegawai.set("yad_pangkat", parsedFormat.format(format.parse(YADPangkat.getText())));
+            pegawai.set("tmt_gaji", dateFormat.format(TMTGaji.getDate()));
+            pegawai.set("yad_gaji", parsedFormat.format(format.parse(YADGaji.getText())));
+            pegawai.save();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
         Base.close();
     }
 
     private void resetForm() {
         TextNip.setText("");
         TextNama.setText("");
-//        SpinnerGajiPokok.setValue(0);
-//        ComboPangkatGol.setSelectedIndex(0);
+        TMTPangkat.setDate(null);
+        YADPangkat.setText("");
+        TMTGaji.setDate(null);
+        YADGaji.setText("");
     }
 
     /**
@@ -468,7 +517,14 @@ public class Pegawai extends javax.swing.JInternalFrame {
             TextNip.setText(pegawai.getString("nip"));
             TextNama.setText(pegawai.getString("nama"));
             ComboPangkatGol.setSelectedIndex(comboPangkatGolID.indexOf(Integer.parseInt(pegawai.getString("id_pangkatgol"))));
-//            SpinnerGajiPokok.setValue(Integer.parseInt(pegawai.getString("gaji_pokok")));
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            
+            try {
+                TMTPangkat.setDate(format.parse(pegawai.getString("tmt_pangkat")));
+                TMTGaji.setDate(format.parse(pegawai.getString("tmt_gaji")));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
             
             setState("edit");
         }
