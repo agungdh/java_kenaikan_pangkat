@@ -11,11 +11,13 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -123,8 +125,8 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                     gajiBerkala.getId(),
                     pegawai.getString("nip"),
                     pegawai.getString("nama"),
-                    gajiBerkala.getString("gaji_pokok_lama"),
-                    gajiBerkala.getString("gaji_pokok_baru"),
+                    NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama"))),
+                    NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru"))),
                     parsedtmt,
                     parsedyad,
                 });                
