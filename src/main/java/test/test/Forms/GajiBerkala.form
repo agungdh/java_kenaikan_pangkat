@@ -183,7 +183,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="LabelPangkatGol2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Pangkat Lama"/>
+        <Property name="text" type="java.lang.String" value="Gaji Pokok Lama"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="LabelPangkatGol3">

@@ -144,9 +144,9 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
     
     private void hapusData() {
         Base.open();
-        KenaikanPangkatModel kenaikanPangkat = KenaikanPangkatModel.findById(ID);
+        GajiBerkalaModel gajiBerkala = GajiBerkalaModel.findById(ID);
         try {
-            kenaikanPangkat.delete();
+            gajiBerkala.delete();
         } catch (DBException e) {
             JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
         }
@@ -290,7 +290,7 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
 
         LabelPangkatGol1.setText("Gaji Pokok Baru");
 
-        LabelPangkatGol2.setText("Pangkat Lama");
+        LabelPangkatGol2.setText("Gaji Pokok Lama");
 
         LabelPangkatGol3.setText("TMT");
 
@@ -408,14 +408,16 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
             ID = model.getValueAt(i, 0).toString();
 
             Base.open();
-            KenaikanPangkatModel kenaikanPangkat = KenaikanPangkatModel.findById(ID);
+            GajiBerkalaModel gajiBerkala = GajiBerkalaModel.findById(ID);
             Base.close();
             
-            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(kenaikanPangkat.getString("id_pegawai"))));
+            SpinnerLama.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama")));
+            SpinnerBaru.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru")));
+            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(gajiBerkala.getString("id_pegawai"))));
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             
             try {
-                TMT.setDate(format.parse(kenaikanPangkat.getString("tmt")));
+                TMT.setDate(format.parse(gajiBerkala.getString("tmt")));
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }

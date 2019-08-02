@@ -3,7 +3,7 @@
 -- Host: 127.0.0.1	Database: kenaikan_pangkat
 -- ------------------------------------------------------
 -- Server version 	5.5.5-10.3.13-MariaDB-2
--- Date: Fri, 02 Aug 2019 13:33:15 +0700
+-- Date: Fri, 02 Aug 2019 14:21:05 +0700
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -63,7 +63,7 @@ CREATE TABLE `gaji_berkala` (
   PRIMARY KEY (`id`),
   KEY `id_pegawai` (`id_pegawai`),
   CONSTRAINT `gaji_berkala_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,11 +73,12 @@ CREATE TABLE `gaji_berkala` (
 LOCK TABLES `gaji_berkala` WRITE;
 /*!40000 ALTER TABLE `gaji_berkala` DISABLE KEYS */;
 SET autocommit=0;
+INSERT INTO `gaji_berkala` VALUES (1,'2016-08-12','2020-08-12',29,100000,200000),(5,'2019-08-23','2023-08-23',29,1241240,1240);
 /*!40000 ALTER TABLE `gaji_berkala` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `gaji_berkala` with 0 row(s)
+-- Dumped table `gaji_berkala` with 2 row(s)
 --
 
 --
@@ -100,7 +101,7 @@ CREATE TABLE `kenaikan_pangkat` (
   CONSTRAINT `kenaikan_pangkat_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`),
   CONSTRAINT `kenaikan_pangkat_ibfk_2` FOREIGN KEY (`id_pangkat_baru`) REFERENCES `pangkatgol` (`id`),
   CONSTRAINT `kenaikan_pangkat_ibfk_3` FOREIGN KEY (`id_pangkat_lama`) REFERENCES `pangkatgol` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,4 +191,4 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on: Fri, 02 Aug 2019 13:33:15 +0700
+-- Dump completed on: Fri, 02 Aug 2019 14:21:05 +0700
