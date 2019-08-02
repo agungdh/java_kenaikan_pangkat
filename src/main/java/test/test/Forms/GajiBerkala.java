@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
+import test.test.Models.GajiBerkalaModel;
 import test.test.Models.KenaikanPangkatModel;
 import test.test.Models.PegawaiModel;
 import test.test.Models.PangkatGolModel;
@@ -31,14 +32,6 @@ import test.test.Models.PangkatGolModel;
  * @author user
  */
 public class GajiBerkala extends javax.swing.JInternalFrame {
-    private List<Integer> comboPangkatGolBaruID = new ArrayList<Integer>();
-    private int comboPangkatGolBaruIndex;
-    private int selectedComboPangkatGolBaruIndex;
-
-    private List<Integer> comboPangkatGolLamaID = new ArrayList<Integer>();
-    private int comboPangkatGolLamaIndex;
-    private int selectedComboPangkatGolLamaIndex;
-
     private List<Integer> comboPegawaiID = new ArrayList<Integer>();
     private int comboPegawaiIndex;
     private int selectedComboPegawaiIndex;
@@ -76,7 +69,7 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
                 if (chooser.getCalendar() != null) {
                     Calendar calendar = chooser.getCalendar();
-                    calendar.add(Calendar.YEAR, 2);
+                    calendar.add(Calendar.YEAR, 4);
                     YAD.setText(sdf.format(calendar.getTime()));
                 }
             }
@@ -101,39 +94,37 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         model = new DefaultTableModel();
         
         Base.open();
-        LazyList<KenaikanPangkatModel> kenaikanPangkats = KenaikanPangkatModel.findAll();
+        LazyList<GajiBerkalaModel> gajiBerkalas = GajiBerkalaModel.findAll();
         Base.close();
         
         model.addColumn("#ID");
         model.addColumn("NIP");
         model.addColumn("Nama");
-        model.addColumn("Pangkat Golongan Lama");
-        model.addColumn("Pangkat Golongan Baru");
+        model.addColumn("Gaji Lama");
+        model.addColumn("Gaji Baru");
         model.addColumn("TMT");
         model.addColumn("YAD");
 
         Base.open();
-        for(KenaikanPangkatModel kenaikanPangkat : kenaikanPangkats) {
-            PegawaiModel pegawai = kenaikanPangkat.parent(PegawaiModel.class);
-            PangkatGolModel PangkatGolLama = PangkatGolModel.findById(kenaikanPangkat.getString("id_pangkat_lama"));
-            PangkatGolModel PangkatGolBaru = PangkatGolModel.findById(kenaikanPangkat.getString("id_pangkat_baru"));
+        for(GajiBerkalaModel gajiBerkala : gajiBerkalas) {
+            PegawaiModel pegawai = gajiBerkala.parent(PegawaiModel.class);
             
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             
             try {
-                Date tmt = format.parse(kenaikanPangkat.getString("tmt"));
-                Date yad = format.parse(kenaikanPangkat.getString("yad"));
+                Date tmt = format.parse(gajiBerkala.getString("tmt"));
+                Date yad = format.parse(gajiBerkala.getString("yad"));
                 
                 SimpleDateFormat parsedFormat = new SimpleDateFormat("dd-MM-YYYY");
                 String parsedtmt = parsedFormat.format(tmt);
                 String parsedyad = parsedFormat.format(yad);
                 
                 model.addRow(new Object[]{
-                    kenaikanPangkat.getId(),
+                    gajiBerkala.getId(),
                     pegawai.getString("nip"),
                     pegawai.getString("nama"),
-                    PangkatGolLama.getString("pangkatgol"),
-                    PangkatGolBaru.getString("pangkatgol"),
+                    gajiBerkala.getString("gaji_pokok_lama"),
+                    gajiBerkala.getString("gaji_pokok_baru"),
                     parsedtmt,
                     parsedyad,
                 });                
@@ -182,17 +173,13 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         SimpleDateFormat parsedFormat = new SimpleDateFormat("yyyy-MM-dd");
         Base.open();
         try {
-            KenaikanPangkatModel kenaikanPangkat = new KenaikanPangkatModel();
-            kenaikanPangkat.set("tmt", dateFormat.format(TMT.getDate()));
-            kenaikanPangkat.set("yad", parsedFormat.format(format.parse(YAD.getText())));
-            kenaikanPangkat.set("id_pegawai", selectedComboPegawaiIndex);
-            kenaikanPangkat.set("id_pangkat_lama", selectedComboPangkatGolLamaIndex);
-            kenaikanPangkat.set("id_pangkat_baru", selectedComboPangkatGolBaruIndex);
-            kenaikanPangkat.save();
-            
-            PegawaiModel pegawai = kenaikanPangkat.parent(PegawaiModel.class);
-            pegawai.set("id_pangkatgol", selectedComboPangkatGolBaruIndex);
-            pegawai.save();
+            GajiBerkalaModel GajiBerkala = new GajiBerkalaModel();
+            GajiBerkala.set("tmt", dateFormat.format(TMT.getDate()));
+            GajiBerkala.set("yad", parsedFormat.format(format.parse(YAD.getText())));
+            GajiBerkala.set("id_pegawai", selectedComboPegawaiIndex);
+            GajiBerkala.set("gaji_pokok_lama", SpinnerLama.getValue());
+            GajiBerkala.set("gaji_pokok_baru", SpinnerBaru.getValue());
+            GajiBerkala.save();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -205,17 +192,13 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         SimpleDateFormat parsedFormat = new SimpleDateFormat("yyyy-MM-dd");
         Base.open();
         try {
-            KenaikanPangkatModel kenaikanPangkat = KenaikanPangkatModel.findById(ID);
-            kenaikanPangkat.set("tmt", dateFormat.format(TMT.getDate()));
-            kenaikanPangkat.set("yad", parsedFormat.format(format.parse(YAD.getText())));
-            kenaikanPangkat.set("id_pegawai", selectedComboPegawaiIndex);
-            kenaikanPangkat.set("id_pangkat_lama", selectedComboPangkatGolLamaIndex);
-            kenaikanPangkat.set("id_pangkat_baru", selectedComboPangkatGolBaruIndex);
-            kenaikanPangkat.save();
-            
-//            PegawaiModel pegawai = kenaikanPangkat.parent(PegawaiModel.class);
-//            pegawai.set("id_pangkatgol", selectedComboPangkatGolBaruIndex);
-//            pegawai.save();
+            GajiBerkalaModel GajiBerkala = GajiBerkalaModel.findById(ID);
+            GajiBerkala.set("tmt", dateFormat.format(TMT.getDate()));
+            GajiBerkala.set("yad", parsedFormat.format(format.parse(YAD.getText())));
+            GajiBerkala.set("id_pegawai", selectedComboPegawaiIndex);
+            GajiBerkala.set("gaji_pokok_lama", SpinnerLama.getValue());
+            GajiBerkala.set("gaji_pokok_baru", SpinnerBaru.getValue());
+            GajiBerkala.save();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -226,6 +209,8 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         ComboPegawai.setSelectedIndex(0);
         TMT.setDate(null);
         YAD.setText("");
+        SpinnerLama.setValue(0);
+        SpinnerBaru.setValue(0);
     }
 
     /**
@@ -301,7 +286,7 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
 
         LabelPangkatGol.setText("Pegawai");
 
-        LabelPangkatGol1.setText("Pangkat Baru");
+        LabelPangkatGol1.setText("Gaji Pokok Baru");
 
         LabelPangkatGol2.setText("Pangkat Lama");
 
