@@ -382,7 +382,7 @@ public class KenaikanPangkat extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ButtonTambahUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTambahUbahActionPerformed
-        System.out.println(TMT.toString());
+//        System.out.println(TMT.toString());
 //        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //        Date date = TMT.getDate();
 //        String strDate = dateFormat.format(date);

@@ -3,7 +3,7 @@
 -- Host: 127.0.0.1	Database: kenaikan_pangkat
 -- ------------------------------------------------------
 -- Server version 	5.5.5-10.3.13-MariaDB-2
--- Date: Thu, 01 Aug 2019 11:32:45 +0700
+-- Date: Fri, 02 Aug 2019 08:58:52 +0700
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -162,7 +162,7 @@ CREATE TABLE `pangkatgol` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pangkatgol` varchar(191) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -172,12 +172,12 @@ CREATE TABLE `pangkatgol` (
 LOCK TABLES `pangkatgol` WRITE;
 /*!40000 ALTER TABLE `pangkatgol` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `pangkatgol` VALUES (1,'satu 1'),(2,'dua 2');
+INSERT INTO `pangkatgol` VALUES (9,'IV/e Pembina Utama'),(10,'IV/d Pembina UtamaMadya'),(11,'IV/c Pembina Utama Muda'),(12,'IV/b Pembina Tingkat I'),(13,'IV/a Pembina'),(14,'III/d Penata Tingkat I'),(15,'III/c Penata'),(16,'III/b Penata Muda Tingkat I'),(17,'III/a Penata Muda'),(18,'II/d Pengatur Tingkat I'),(19,'II/c Pengatur'),(20,'II/b Pengatur Muda Tingkat I'),(21,'II/a Pengatur Muda'),(22,'I/d Juru Tingkat I'),(23,'I/c Juru'),(24,'I/b Juru Muda Tingkat I'),(25,'I/a Juru Muda');
 /*!40000 ALTER TABLE `pangkatgol` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `pangkatgol` with 2 row(s)
+-- Dumped table `pangkatgol` with 17 row(s)
 --
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -189,4 +189,4 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on: Thu, 01 Aug 2019 11:32:45 +0700
+-- Dump completed on: Fri, 02 Aug 2019 08:58:52 +0700

@@ -6,6 +6,7 @@
 package test.test.Forms;
 
 import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -13,6 +14,7 @@ import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -58,13 +60,24 @@ public class Pegawai extends javax.swing.JInternalFrame {
         
         TMTPangkat.addPropertyChangeListener("date",new PropertyChangeListener  () { 
             public void propertyChange(PropertyChangeEvent e){
-            JDateChooser chooser=(JDateChooser)e.getSource();
-             SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
-//             field.setText(sdf.format(chooser.getDate()));
-             System.out.println(sdf.format(chooser.getDate()));
-
-        }
+                JDateChooser chooser=(JDateChooser)e.getSource();
+                SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+                Calendar calendar = chooser.getCalendar();
+                calendar.add(Calendar.YEAR, 2);
+                YADPangkat.setText(sdf.format(calendar.getTime()));
+            }
         });
+
+        TMTGaji.addPropertyChangeListener("date",new PropertyChangeListener  () { 
+            public void propertyChange(PropertyChangeEvent e){
+                JDateChooser chooser=(JDateChooser)e.getSource();
+                SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+                Calendar calendar = chooser.getCalendar();
+                calendar.add(Calendar.YEAR, 4);
+                YADGaji.setText(sdf.format(calendar.getTime()));
+            }
+        });
+        
     }
     
     public void loadPangkatGol() {
@@ -201,13 +214,13 @@ public class Pegawai extends javax.swing.JInternalFrame {
         LabelCari = new javax.swing.JLabel();
         TMTPangkat = new com.toedter.calendar.JDateChooser();
         LabelPangkatGol3 = new javax.swing.JLabel();
-        YADPangkat = new com.toedter.calendar.JDateChooser();
         LabelPangkatGol4 = new javax.swing.JLabel();
         TMTGaji = new com.toedter.calendar.JDateChooser();
         LabelPangkatGol5 = new javax.swing.JLabel();
-        YADGaji = new com.toedter.calendar.JDateChooser();
         LabelPangkatGol6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        YADGaji = new javax.swing.JTextField();
+        YADPangkat = new javax.swing.JTextField();
 
         setClosable(true);
         setTitle("Pegawai");
@@ -268,6 +281,7 @@ public class Pegawai extends javax.swing.JInternalFrame {
 
         LabelCari.setText("Cari (NIP)");
 
+        TMTPangkat.setDateFormatString("dd-MM-yyyy");
         TMTPangkat.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 TMTPangkatMouseReleased(evt);
@@ -278,11 +292,17 @@ public class Pegawai extends javax.swing.JInternalFrame {
 
         LabelPangkatGol4.setText("YAD");
 
+        TMTGaji.setDateFormatString("dd-MM-yyyy");
+
         LabelPangkatGol5.setText("TMT");
 
         LabelPangkatGol6.setText("YAD");
 
         jLabel1.setText("Gaji");
+
+        YADGaji.setEditable(false);
+
+        YADPangkat.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -376,13 +396,14 @@ public class Pegawai extends javax.swing.JInternalFrame {
                             .addComponent(TMTGaji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LabelPangkatGol6)
-                            .addComponent(YADGaji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ButtonTambahUbah)
-                            .addComponent(ButtonResetHapus))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(LabelPangkatGol6)
+                                .addGap(46, 46, 46)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(ButtonTambahUbah)
+                                    .addComponent(ButtonResetHapus)))
+                            .addComponent(YADGaji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TextCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LabelCari))
@@ -400,6 +421,10 @@ public class Pegawai extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Form NIP Masih Kosong !!!");
             } else if (TextNama.getText().trim().equals("")) {
                 JOptionPane.showMessageDialog(null, "Form Nama Masih Kosong !!!");
+            } else if (TMTPangkat.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Form TMT Pangkat Masih Kosong !!!");
+            } else if (TMTGaji.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Form TMT Gaji Masih Kosong !!!");
             } else {
                 tambahData(TextNip.getText(), TextNama.getText());
                 resetForm();
@@ -410,6 +435,10 @@ public class Pegawai extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Form NIP Masih Kosong !!!");
             } else if (TextNama.getText().trim().equals("")) {
                 JOptionPane.showMessageDialog(null, "Form Nama Masih Kosong !!!");
+            } else if (TMTPangkat.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Form TMT Pangkat Masih Kosong !!!");
+            } else if (TMTGaji.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Form TMT Gaji Masih Kosong !!!");
             } else {
                 ubahData(ID, TextNip.getText(), TextNama.getText());
                 resetForm();
@@ -488,8 +517,8 @@ public class Pegawai extends javax.swing.JInternalFrame {
     private javax.swing.JTextField TextCari;
     private javax.swing.JTextField TextNama;
     private javax.swing.JTextField TextNip;
-    private com.toedter.calendar.JDateChooser YADGaji;
-    private com.toedter.calendar.JDateChooser YADPangkat;
+    private javax.swing.JTextField YADGaji;
+    private javax.swing.JTextField YADPangkat;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
