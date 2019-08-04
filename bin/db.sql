@@ -3,7 +3,7 @@
 -- Host: 127.0.0.1	Database: kenaikan_pangkat
 -- ------------------------------------------------------
 -- Server version 	5.5.5-10.3.13-MariaDB-2
--- Date: Fri, 02 Aug 2019 14:21:05 +0700
+-- Date: Sun, 04 Aug 2019 15:29:54 +0700
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,7 +30,7 @@ CREATE TABLE `usulan` (
   PRIMARY KEY (`id`),
   KEY `id_pegawai` (`id_pegawai`),
   CONSTRAINT `usulan_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,6 +45,35 @@ UNLOCK TABLES;
 COMMIT;
 
 -- Dumped table `usulan` with 0 row(s)
+--
+
+--
+-- Table structure for table `admin`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(191) NOT NULL,
+  `password` varchar(191) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admin`
+--
+
+LOCK TABLES `admin` WRITE;
+/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+SET autocommit=0;
+INSERT INTO `admin` VALUES (9,'admin','21232f297a57a5a743894a0e4a801fc3');
+/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+
+-- Dumped table `admin` with 1 row(s)
 --
 
 --
@@ -73,12 +102,12 @@ CREATE TABLE `gaji_berkala` (
 LOCK TABLES `gaji_berkala` WRITE;
 /*!40000 ALTER TABLE `gaji_berkala` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `gaji_berkala` VALUES (1,'2016-08-12','2020-08-12',29,100000,200000),(5,'2019-08-23','2023-08-23',29,1241240,1240);
+INSERT INTO `gaji_berkala` VALUES (5,'2019-08-23','2023-08-23',29,1241240,1240);
 /*!40000 ALTER TABLE `gaji_berkala` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `gaji_berkala` with 2 row(s)
+-- Dumped table `gaji_berkala` with 1 row(s)
 --
 
 --
@@ -191,4 +220,4 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on: Fri, 02 Aug 2019 14:21:05 +0700
+-- Dump completed on: Sun, 04 Aug 2019 15:29:54 +0700

@@ -7,7 +7,7 @@ package test.test.Forms;
 
 import javax.swing.JOptionPane;
 import org.javalite.activejdbc.Base;
-import test.test.Models.UserModel;
+import test.test.Models.AdminModel;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
@@ -114,7 +114,7 @@ public class Login extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Form Password Masih Kosong !!!");
         } else {
             Base.open();
-            UserModel user = UserModel.findFirst("username = ? AND password = ?", TextUsername.getText(), DigestUtils.md5Hex(TextPassword.getText()));
+            AdminModel user = AdminModel.findFirst("username = ? AND password = ?", TextUsername.getText(), DigestUtils.md5Hex(TextPassword.getText()));
             Base.close();
             
             if (user != null) {

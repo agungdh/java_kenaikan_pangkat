@@ -34,7 +34,11 @@ public class Form extends javax.swing.JFrame {
         UserLabel = new javax.swing.JLabel();
         MenuBar = new javax.swing.JMenuBar();
         MenuCRUD = new javax.swing.JMenu();
-        SubMenuOrang = new javax.swing.JMenuItem();
+        SubMenuPangkatGolongan = new javax.swing.JMenuItem();
+        SubMenuPegawai = new javax.swing.JMenuItem();
+        SubMenuUsulan = new javax.swing.JMenuItem();
+        SubMenuKenaikanPangkat = new javax.swing.JMenuItem();
+        SubMenuGajiBerkala = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         SubMenuLogout = new javax.swing.JMenuItem();
 
@@ -68,13 +72,45 @@ public class Form extends javax.swing.JFrame {
             }
         });
 
-        SubMenuOrang.setText("Orang");
-        SubMenuOrang.addActionListener(new java.awt.event.ActionListener() {
+        SubMenuPangkatGolongan.setText("Pangkat Golongan");
+        SubMenuPangkatGolongan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SubMenuOrangActionPerformed(evt);
+                SubMenuPangkatGolonganActionPerformed(evt);
             }
         });
-        MenuCRUD.add(SubMenuOrang);
+        MenuCRUD.add(SubMenuPangkatGolongan);
+
+        SubMenuPegawai.setText("Pegawai");
+        SubMenuPegawai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SubMenuPegawaiActionPerformed(evt);
+            }
+        });
+        MenuCRUD.add(SubMenuPegawai);
+
+        SubMenuUsulan.setText("Usulan");
+        SubMenuUsulan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SubMenuUsulanActionPerformed(evt);
+            }
+        });
+        MenuCRUD.add(SubMenuUsulan);
+
+        SubMenuKenaikanPangkat.setText("Kenaikan Pangkat");
+        SubMenuKenaikanPangkat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SubMenuKenaikanPangkatActionPerformed(evt);
+            }
+        });
+        MenuCRUD.add(SubMenuKenaikanPangkat);
+
+        SubMenuGajiBerkala.setText("Gaji Berkala");
+        SubMenuGajiBerkala.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SubMenuGajiBerkalaActionPerformed(evt);
+            }
+        });
+        MenuCRUD.add(SubMenuGajiBerkala);
 
         MenuBar.add(MenuCRUD);
 
@@ -116,11 +152,11 @@ public class Form extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void SubMenuOrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuOrangActionPerformed
-        Orang orang = new Orang();
-        DesktopPane.add(orang);
-        orang.show();
-    }//GEN-LAST:event_SubMenuOrangActionPerformed
+    private void SubMenuPangkatGolonganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuPangkatGolonganActionPerformed
+        PangkatGol display = new PangkatGol();
+        DesktopPane.add(display);
+        display.show();
+    }//GEN-LAST:event_SubMenuPangkatGolonganActionPerformed
 
     private void MenuCRUDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuCRUDActionPerformed
         // TODO add your handling code here:
@@ -137,14 +173,38 @@ public class Form extends javax.swing.JFrame {
         Init();
     }//GEN-LAST:event_SubMenuLogoutActionPerformed
 
-    public void Init() {
-//        Login login = new Login();
-//        DesktopPane.add(login);
-//        login.show();
+    private void SubMenuPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuPegawaiActionPerformed
+        Pegawai display = new Pegawai();
+        DesktopPane.add(display);
+        display.show();
+    }//GEN-LAST:event_SubMenuPegawaiActionPerformed
 
-        GajiBerkala dbg = new GajiBerkala();
-        DesktopPane.add(dbg);
-        dbg.show();
+    private void SubMenuUsulanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuUsulanActionPerformed
+        Usulan display = new Usulan();
+        DesktopPane.add(display);
+        display.show();
+    }//GEN-LAST:event_SubMenuUsulanActionPerformed
+
+    private void SubMenuKenaikanPangkatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuKenaikanPangkatActionPerformed
+        KenaikanPangkat display = new KenaikanPangkat();
+        DesktopPane.add(display);
+        display.show();
+    }//GEN-LAST:event_SubMenuKenaikanPangkatActionPerformed
+
+    private void SubMenuGajiBerkalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuGajiBerkalaActionPerformed
+        GajiBerkala display = new GajiBerkala();
+        DesktopPane.add(display);
+        display.show();
+    }//GEN-LAST:event_SubMenuGajiBerkalaActionPerformed
+
+    public void Init() {
+        Login login = new Login();
+        DesktopPane.add(login);
+        login.show();
+//
+//        Usulan dbg = new Usulan();
+//        DesktopPane.add(dbg);
+//        dbg.show();
         
         MenuBar.setVisible(false);
     }
@@ -189,8 +249,12 @@ public class Form extends javax.swing.JFrame {
     private javax.swing.JDesktopPane DesktopPane;
     public javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MenuCRUD;
+    private javax.swing.JMenuItem SubMenuGajiBerkala;
+    private javax.swing.JMenuItem SubMenuKenaikanPangkat;
     private javax.swing.JMenuItem SubMenuLogout;
-    private javax.swing.JMenuItem SubMenuOrang;
+    private javax.swing.JMenuItem SubMenuPangkatGolongan;
+    private javax.swing.JMenuItem SubMenuPegawai;
+    private javax.swing.JMenuItem SubMenuUsulan;
     public javax.swing.JLabel UserLabel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JToolBar jToolBar1;
