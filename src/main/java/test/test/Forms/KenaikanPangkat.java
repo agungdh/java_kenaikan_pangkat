@@ -6,6 +6,8 @@
 package test.test.Forms;
 
 import com.toedter.calendar.JDateChooser;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -19,9 +21,11 @@ import java.util.List;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
+import test.test.Classes.MendekatiTMT;
 import test.test.Models.KenaikanPangkatModel;
 import test.test.Models.PegawaiModel;
 import test.test.Models.PangkatGolModel;
@@ -159,6 +163,9 @@ public class KenaikanPangkat extends javax.swing.JInternalFrame {
         Base.close();
         
         TableKenaikanPangkat.setModel(model);
+        
+        MendekatiTMT colorRenderer = new MendekatiTMT();
+        TableKenaikanPangkat.setDefaultRenderer(Object.class, colorRenderer);
         
         setState("index");
     }
