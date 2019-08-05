@@ -16,10 +16,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
  
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 import org.joda.time.DateTime;
@@ -53,8 +56,21 @@ public class MendekatiTMT implements TableCellRenderer {
         
         switch (tipe) {
             case "kenaikanPangkat":
+                Base.open();
+                List<Map> results = new DB().all("SELECT DISTINCT(id_pegawai) FROM kenaikan_pangkat");
+                Base.close();
+
+                List<Map> dummyData;
+                List<String> IDCheck = new ArrayList<String>();
+                for(Map result : results) {
+                    Base.open();
+                    dummyData = new DB().all("SELECT * FROM kenaikan_pangkat WHERE id_pegawai = ? ORDER BY yad desc LIMIT 1", result.get("id_pegawai"));
+                    Base.close();
+                    IDCheck.add(dummyData.get(0).get("id").toString());
+                }
+
                 for(KenaikanPangkatModel data : (LazyList<KenaikanPangkatModel>)this.mdl) {
-                    if (cekDeadline(data.getString("yad"))) {
+                    if (IDCheck.contains(data.getString("id")) && cekDeadline(data.getString("yad"))) {
                         yangHarusDimerahin.add(i);
                     }
                     

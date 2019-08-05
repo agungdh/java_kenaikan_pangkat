@@ -198,13 +198,13 @@ public class Form extends javax.swing.JFrame {
     }//GEN-LAST:event_SubMenuGajiBerkalaActionPerformed
 
     public void Init() {
-//        Login login = new Login();
-//        DesktopPane.add(login);
-//        login.show();
+        Login login = new Login();
+        DesktopPane.add(login);
+        login.show();
 
-        KenaikanPangkat dbg = new KenaikanPangkat();
-        DesktopPane.add(dbg);
-        dbg.show();
+//        KenaikanPangkat dbg = new KenaikanPangkat();
+//        DesktopPane.add(dbg);
+//        dbg.show();
         
         MenuBar.setVisible(false);
     }
