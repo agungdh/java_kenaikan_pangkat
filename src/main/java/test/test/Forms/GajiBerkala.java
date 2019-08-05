@@ -24,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
+import test.test.Classes.MendekatiTMT;
 import test.test.Models.GajiBerkalaModel;
 import test.test.Models.KenaikanPangkatModel;
 import test.test.Models.PegawaiModel;
@@ -138,6 +139,9 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         Base.close();
         
         TableKenaikanPangkat.setModel(model);
+        
+        MendekatiTMT colorRenderer = new MendekatiTMT(gajiBerkalas, "gajiBerkala");
+        TableKenaikanPangkat.setDefaultRenderer(Object.class, colorRenderer);
         
         setState("index");
     }

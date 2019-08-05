@@ -27,6 +27,7 @@ import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 import org.joda.time.DateTime;
 import org.joda.time.Months;
+import test.test.Models.GajiBerkalaModel;
 import test.test.Models.KenaikanPangkatModel;
  
 /**
@@ -53,15 +54,16 @@ public class MendekatiTMT implements TableCellRenderer {
         
         int i = 0;
         List<Integer> yangHarusDimerahin = new ArrayList<Integer>();
-        
+        List<Map> results;
+        List<Map> dummyData;
+        List<String> IDCheck = new ArrayList<String>();
+                
         switch (tipe) {
             case "kenaikanPangkat":
                 Base.open();
-                List<Map> results = new DB().all("SELECT DISTINCT(id_pegawai) FROM kenaikan_pangkat");
+                results = new DB().all("SELECT DISTINCT(id_pegawai) FROM kenaikan_pangkat");
                 Base.close();
 
-                List<Map> dummyData;
-                List<String> IDCheck = new ArrayList<String>();
                 for(Map result : results) {
                     Base.open();
                     dummyData = new DB().all("SELECT * FROM kenaikan_pangkat WHERE id_pegawai = ? ORDER BY yad desc LIMIT 1", result.get("id_pegawai"));
@@ -70,6 +72,32 @@ public class MendekatiTMT implements TableCellRenderer {
                 }
 
                 for(KenaikanPangkatModel data : (LazyList<KenaikanPangkatModel>)this.mdl) {
+                    if (IDCheck.contains(data.getString("id")) && cekDeadline(data.getString("yad"))) {
+                        yangHarusDimerahin.add(i);
+                    }
+                    
+                    i++;
+                }
+                
+                if (yangHarusDimerahin.contains(row)) {
+                    c.setBackground(Color.RED);
+                } else {
+                    c.setBackground(Color.WHITE);
+                }
+                break;
+            case "gajiBerkala":
+                Base.open();
+                results = new DB().all("SELECT DISTINCT(id_pegawai) FROM gaji_berkala");
+                Base.close();
+
+                for(Map result : results) {
+                    Base.open();
+                    dummyData = new DB().all("SELECT * FROM gaji_berkala WHERE id_pegawai = ? ORDER BY yad desc LIMIT 1", result.get("id_pegawai"));
+                    Base.close();
+                    IDCheck.add(dummyData.get(0).get("id").toString());
+                }
+
+                for(GajiBerkalaModel data : (LazyList<GajiBerkalaModel>)this.mdl) {
                     if (IDCheck.contains(data.getString("id")) && cekDeadline(data.getString("yad"))) {
                         yangHarusDimerahin.add(i);
                     }
