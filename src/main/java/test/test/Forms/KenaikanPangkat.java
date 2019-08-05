@@ -164,7 +164,7 @@ public class KenaikanPangkat extends javax.swing.JInternalFrame {
         
         TableKenaikanPangkat.setModel(model);
         
-        MendekatiTMT colorRenderer = new MendekatiTMT();
+        MendekatiTMT colorRenderer = new MendekatiTMT(kenaikanPangkats, "kenaikanPangkat");
         TableKenaikanPangkat.setDefaultRenderer(Object.class, colorRenderer);
         
         setState("index");

@@ -3,7 +3,7 @@
 -- Host: 127.0.0.1	Database: kenaikan_pangkat
 -- ------------------------------------------------------
 -- Server version 	5.5.5-10.3.13-MariaDB-2
--- Date: Sun, 04 Aug 2019 15:29:54 +0700
+-- Date: Mon, 05 Aug 2019 09:12:31 +0700
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -130,7 +130,7 @@ CREATE TABLE `kenaikan_pangkat` (
   CONSTRAINT `kenaikan_pangkat_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`),
   CONSTRAINT `kenaikan_pangkat_ibfk_2` FOREIGN KEY (`id_pangkat_baru`) REFERENCES `pangkatgol` (`id`),
   CONSTRAINT `kenaikan_pangkat_ibfk_3` FOREIGN KEY (`id_pangkat_lama`) REFERENCES `pangkatgol` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,11 +140,12 @@ CREATE TABLE `kenaikan_pangkat` (
 LOCK TABLES `kenaikan_pangkat` WRITE;
 /*!40000 ALTER TABLE `kenaikan_pangkat` DISABLE KEYS */;
 SET autocommit=0;
+INSERT INTO `kenaikan_pangkat` VALUES (11,'2019-08-02','2021-08-02',29,9,9),(12,'2019-07-02','2021-07-02',28,9,9),(13,'2019-08-19','2021-08-19',28,9,9),(15,'2017-08-01','2019-08-01',28,9,9),(16,'2019-08-09','2021-08-09',28,9,9);
 /*!40000 ALTER TABLE `kenaikan_pangkat` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `kenaikan_pangkat` with 0 row(s)
+-- Dumped table `kenaikan_pangkat` with 5 row(s)
 --
 
 --
@@ -175,7 +176,7 @@ CREATE TABLE `pegawai` (
 LOCK TABLES `pegawai` WRITE;
 /*!40000 ALTER TABLE `pegawai` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `pegawai` VALUES (28,'dsf 2','fsdaf 3',10,'2017-08-23','2021-08-23','2018-08-04','2020-08-04'),(29,'asdfasf asdf','asdfadfas df',11,'2019-08-19','2023-08-19','2019-08-17','2021-08-17');
+INSERT INTO `pegawai` VALUES (28,'dsf 2','fsdaf 3',9,'2017-08-23','2021-08-23','2018-08-04','2020-08-04'),(29,'asdfasf asdf','asdfadfas df',11,'2019-08-19','2023-08-19','2019-08-17','2021-08-17');
 /*!40000 ALTER TABLE `pegawai` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -220,4 +221,4 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on: Sun, 04 Aug 2019 15:29:54 +0700
+-- Dump completed on: Mon, 05 Aug 2019 09:12:31 +0700
