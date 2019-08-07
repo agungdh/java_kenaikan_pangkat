@@ -3,7 +3,7 @@
 -- Host: 127.0.0.1	Database: kenaikan_pangkat
 -- ------------------------------------------------------
 -- Server version 	5.5.5-10.3.13-MariaDB-2
--- Date: Mon, 05 Aug 2019 09:37:38 +0700
+-- Date: Wed, 07 Aug 2019 22:46:28 +0700
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -87,12 +87,10 @@ CREATE TABLE `gaji_berkala` (
   `tmt` date NOT NULL,
   `yad` date NOT NULL,
   `id_pegawai` int(11) NOT NULL,
-  `gaji_pokok_lama` int(11) NOT NULL,
-  `gaji_pokok_baru` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_pegawai` (`id_pegawai`),
   CONSTRAINT `gaji_berkala_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,12 +100,12 @@ CREATE TABLE `gaji_berkala` (
 LOCK TABLES `gaji_berkala` WRITE;
 /*!40000 ALTER TABLE `gaji_berkala` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `gaji_berkala` VALUES (5,'2013-08-21','2017-08-21',29,1241240,1240),(6,'2015-08-11','2019-08-11',28,0,0),(7,'2009-08-03','2013-08-03',29,0,0);
+INSERT INTO `gaji_berkala` VALUES (5,'2013-08-21','2017-08-21',29),(6,'2015-08-11','2019-08-11',28),(7,'2009-08-03','2013-08-03',29),(8,'2019-08-17','2023-08-17',28),(9,'2019-08-01','2023-08-01',28);
 /*!40000 ALTER TABLE `gaji_berkala` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `gaji_berkala` with 3 row(s)
+-- Dumped table `gaji_berkala` with 5 row(s)
 --
 
 --
@@ -130,7 +128,7 @@ CREATE TABLE `kenaikan_pangkat` (
   CONSTRAINT `kenaikan_pangkat_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`),
   CONSTRAINT `kenaikan_pangkat_ibfk_2` FOREIGN KEY (`id_pangkat_baru`) REFERENCES `pangkatgol` (`id`),
   CONSTRAINT `kenaikan_pangkat_ibfk_3` FOREIGN KEY (`id_pangkat_lama`) REFERENCES `pangkatgol` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,12 +138,12 @@ CREATE TABLE `kenaikan_pangkat` (
 LOCK TABLES `kenaikan_pangkat` WRITE;
 /*!40000 ALTER TABLE `kenaikan_pangkat` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `kenaikan_pangkat` VALUES (11,'2016-08-15','2018-08-15',29,9,9),(17,'2015-08-12','2017-08-12',28,9,9),(18,'2016-08-20','2018-08-20',28,9,9),(19,'2019-08-16','2021-08-16',28,9,9);
+INSERT INTO `kenaikan_pangkat` VALUES (11,'2016-08-15','2018-08-15',29,9,9),(17,'2015-08-12','2017-08-12',28,9,9),(18,'2016-08-20','2018-08-20',28,9,9),(19,'2019-08-16','2021-08-16',28,9,9),(20,'2019-08-03','2021-08-03',28,9,10);
 /*!40000 ALTER TABLE `kenaikan_pangkat` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `kenaikan_pangkat` with 4 row(s)
+-- Dumped table `kenaikan_pangkat` with 5 row(s)
 --
 
 --
@@ -176,7 +174,7 @@ CREATE TABLE `pegawai` (
 LOCK TABLES `pegawai` WRITE;
 /*!40000 ALTER TABLE `pegawai` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `pegawai` VALUES (28,'dsf 2','fsdaf 3',9,'2017-08-23','2021-08-23','2018-08-04','2020-08-04'),(29,'asdfasf asdf','asdfadfas df',11,'2019-08-19','2023-08-19','2019-08-17','2021-08-17');
+INSERT INTO `pegawai` VALUES (28,'dsf 2','fsdaf 3',10,'2019-08-01','2023-08-01','2019-08-03','2021-08-03'),(29,'asdfasf asdf','asdfadfas df',11,'2019-08-02','2023-08-02','2019-08-17','2021-08-17');
 /*!40000 ALTER TABLE `pegawai` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -221,4 +219,4 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on: Mon, 05 Aug 2019 09:37:38 +0700
+-- Dump completed on: Wed, 07 Aug 2019 22:46:28 +0700
