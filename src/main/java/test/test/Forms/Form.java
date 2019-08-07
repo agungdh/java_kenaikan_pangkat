@@ -153,7 +153,7 @@ public class Form extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void SubMenuPangkatGolonganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuPangkatGolonganActionPerformed
-        PangkatGol display = new PangkatGol();
+        PangkatGolLama display = new PangkatGolLama();
         DesktopPane.add(display);
         display.show();
     }//GEN-LAST:event_SubMenuPangkatGolonganActionPerformed
