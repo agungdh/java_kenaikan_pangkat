@@ -213,6 +213,8 @@ public class KenaikanPangkat extends javax.swing.JInternalFrame {
             
             PegawaiModel pegawai = kenaikanPangkat.parent(PegawaiModel.class);
             pegawai.set("id_pangkatgol", selectedComboPangkatGolBaruIndex);
+            pegawai.set("tmt_pangkat", dateFormat.format(TMT.getDate()));
+            pegawai.set("yad_pangkat", parsedFormat.format(format.parse(YAD.getText())));
             pegawai.save();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

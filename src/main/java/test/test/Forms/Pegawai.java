@@ -34,6 +34,7 @@ import org.javalite.activejdbc.LazyList;
 import test.test.Models.PegawaiModel;
 import test.test.Models.PangkatGolModel;
 import javax.swing.text.NumberFormatter;
+import test.test.Classes.MendekatiTMT;
 
 /**
  *
@@ -137,6 +138,9 @@ public class Pegawai extends javax.swing.JInternalFrame {
         Base.close();
         
         TablePegawai.setModel(model);
+        
+        MendekatiTMT colorRenderer = new MendekatiTMT(pegawais, "pegawai");
+        TablePegawai.setDefaultRenderer(Object.class, colorRenderer);
         
         setState("index");
     }

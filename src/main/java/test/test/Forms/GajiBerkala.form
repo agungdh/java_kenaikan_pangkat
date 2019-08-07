@@ -34,7 +34,7 @@
               <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="170" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="224" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="LabelPangkatGol" min="-2" max="-2" attributes="0"/>
@@ -42,19 +42,9 @@
                       <Component id="ComboPegawai" min="-2" pref="192" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="LabelPangkatGol2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="SpinnerLama" min="-2" pref="192" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
                       <Component id="LabelPangkatGol3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="TMT" min="-2" pref="192" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="LabelPangkatGol1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="SpinnerBaru" min="-2" pref="192" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
@@ -81,17 +71,7 @@
                   <Component id="ComboPegawai" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="LabelPangkatGol" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="LabelPangkatGol2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="SpinnerLama" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="LabelPangkatGol1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="SpinnerBaru" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="LabelPangkatGol3" min="-2" max="-2" attributes="0"/>
                   <Component id="TMT" min="-2" max="-2" attributes="0"/>
@@ -108,7 +88,7 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="ScrollPane" min="-2" pref="179" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -176,16 +156,6 @@
         <Property name="text" type="java.lang.String" value="Pegawai"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="LabelPangkatGol1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Gaji Pokok Baru"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="LabelPangkatGol2">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Gaji Pokok Lama"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="LabelPangkatGol3">
       <Properties>
         <Property name="text" type="java.lang.String" value="TMT"/>
@@ -205,10 +175,6 @@
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JSpinner" name="SpinnerLama">
-    </Component>
-    <Component class="javax.swing.JSpinner" name="SpinnerBaru">
     </Component>
   </SubComponents>
 </Form>

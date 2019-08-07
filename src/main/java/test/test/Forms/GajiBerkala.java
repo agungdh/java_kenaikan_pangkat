@@ -103,8 +103,8 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         model.addColumn("#ID");
         model.addColumn("NIP");
         model.addColumn("Nama");
-        model.addColumn("Gaji Lama");
-        model.addColumn("Gaji Baru");
+//        model.addColumn("Gaji Lama");
+//        model.addColumn("Gaji Baru");
         model.addColumn("TMT");
         model.addColumn("YAD");
 
@@ -126,8 +126,8 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                     gajiBerkala.getId(),
                     pegawai.getString("nip"),
                     pegawai.getString("nama"),
-                    NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama"))),
-                    NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru"))),
+//                    NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama"))),
+//                    NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru"))),
                     parsedtmt,
                     parsedyad,
                 });                
@@ -183,9 +183,14 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
             GajiBerkala.set("tmt", dateFormat.format(TMT.getDate()));
             GajiBerkala.set("yad", parsedFormat.format(format.parse(YAD.getText())));
             GajiBerkala.set("id_pegawai", selectedComboPegawaiIndex);
-            GajiBerkala.set("gaji_pokok_lama", SpinnerLama.getValue());
-            GajiBerkala.set("gaji_pokok_baru", SpinnerBaru.getValue());
+//            GajiBerkala.set("gaji_pokok_lama", SpinnerLama.getValue());
+//            GajiBerkala.set("gaji_pokok_baru", SpinnerBaru.getValue());
             GajiBerkala.save();
+            
+            PegawaiModel pegawai = GajiBerkala.parent(PegawaiModel.class);
+            pegawai.set("tmt_gaji", dateFormat.format(TMT.getDate()));
+            pegawai.set("yad_gaji", parsedFormat.format(format.parse(YAD.getText())));
+            pegawai.save();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -202,8 +207,8 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
             GajiBerkala.set("tmt", dateFormat.format(TMT.getDate()));
             GajiBerkala.set("yad", parsedFormat.format(format.parse(YAD.getText())));
             GajiBerkala.set("id_pegawai", selectedComboPegawaiIndex);
-            GajiBerkala.set("gaji_pokok_lama", SpinnerLama.getValue());
-            GajiBerkala.set("gaji_pokok_baru", SpinnerBaru.getValue());
+//            GajiBerkala.set("gaji_pokok_lama", SpinnerLama.getValue());
+//            GajiBerkala.set("gaji_pokok_baru", SpinnerBaru.getValue());
             GajiBerkala.save();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -215,8 +220,8 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         ComboPegawai.setSelectedIndex(0);
         TMT.setDate(null);
         YAD.setText("");
-        SpinnerLama.setValue(0);
-        SpinnerBaru.setValue(0);
+//        SpinnerLama.setValue(0);
+//        SpinnerBaru.setValue(0);
     }
 
     /**
@@ -235,14 +240,10 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         TableKenaikanPangkat = new javax.swing.JTable();
         ComboPegawai = new javax.swing.JComboBox<>();
         LabelPangkatGol = new javax.swing.JLabel();
-        LabelPangkatGol1 = new javax.swing.JLabel();
-        LabelPangkatGol2 = new javax.swing.JLabel();
         LabelPangkatGol3 = new javax.swing.JLabel();
         TMT = new com.toedter.calendar.JDateChooser();
         LabelPangkatGol4 = new javax.swing.JLabel();
         YAD = new javax.swing.JTextField();
-        SpinnerLama = new javax.swing.JSpinner();
-        SpinnerBaru = new javax.swing.JSpinner();
 
         setClosable(true);
         setTitle("Gaji Berkala");
@@ -292,10 +293,6 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
 
         LabelPangkatGol.setText("Pegawai");
 
-        LabelPangkatGol1.setText("Gaji Pokok Baru");
-
-        LabelPangkatGol2.setText("Gaji Pokok Lama");
-
         LabelPangkatGol3.setText("TMT");
 
         TMT.setDateFormatString("dd-MM-yyyy");
@@ -313,24 +310,16 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                 .addComponent(ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 706, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(170, 170, 170)
+                .addGap(224, 224, 224)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(LabelPangkatGol)
                         .addGap(18, 18, 18)
                         .addComponent(ComboPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(LabelPangkatGol2)
-                        .addGap(18, 18, 18)
-                        .addComponent(SpinnerLama, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(LabelPangkatGol3)
                         .addGap(18, 18, 18)
                         .addComponent(TMT, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(LabelPangkatGol1)
-                        .addGap(18, 18, 18)
-                        .addComponent(SpinnerBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(ButtonTambahUbah)
@@ -349,15 +338,7 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ComboPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LabelPangkatGol))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LabelPangkatGol2)
-                    .addComponent(SpinnerLama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LabelPangkatGol1)
-                    .addComponent(SpinnerBaru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(LabelPangkatGol3)
                     .addComponent(TMT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -371,7 +352,7 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                     .addComponent(ButtonTambahUbah))
                 .addGap(18, 18, 18)
                 .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -415,8 +396,8 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
             GajiBerkalaModel gajiBerkala = GajiBerkalaModel.findById(ID);
             Base.close();
             
-            SpinnerLama.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama")));
-            SpinnerBaru.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru")));
+//            SpinnerLama.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama")));
+//            SpinnerBaru.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru")));
             ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(gajiBerkala.getString("id_pegawai"))));
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             
@@ -447,13 +428,9 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
     private javax.swing.JButton ButtonTambahUbah;
     private javax.swing.JComboBox<String> ComboPegawai;
     private javax.swing.JLabel LabelPangkatGol;
-    private javax.swing.JLabel LabelPangkatGol1;
-    private javax.swing.JLabel LabelPangkatGol2;
     private javax.swing.JLabel LabelPangkatGol3;
     private javax.swing.JLabel LabelPangkatGol4;
     private javax.swing.JScrollPane ScrollPane;
-    private javax.swing.JSpinner SpinnerBaru;
-    private javax.swing.JSpinner SpinnerLama;
     private com.toedter.calendar.JDateChooser TMT;
     private javax.swing.JTable TableKenaikanPangkat;
     private javax.swing.JTextField YAD;
