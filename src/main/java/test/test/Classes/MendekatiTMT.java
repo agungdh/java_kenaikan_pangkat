@@ -80,6 +80,8 @@ public class MendekatiTMT implements TableCellRenderer {
                 i++;
             }
 
+            i = 0;
+            
 //                Kenaikan Pangkat
             Base.open();
             results = new DB().all("SELECT DISTINCT(id_pegawai) FROM kenaikan_pangkat");
@@ -105,6 +107,8 @@ public class MendekatiTMT implements TableCellRenderer {
             } else {
                 c.setBackground(Color.WHITE);
             }
+            
+            System.out.println(yangHarusDimerahin.toString());
         } else {
             switch (tipe) {
                 case "kenaikanPangkat":
