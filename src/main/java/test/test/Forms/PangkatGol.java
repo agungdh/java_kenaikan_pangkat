@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Image;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.table.DefaultTableModel;
@@ -39,6 +40,8 @@ public class PangkatGol extends javax.swing.JFrame {
         Logo.setIcon(image);
         
         loadTable();
+        
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
     
     private void loadTable() {
@@ -139,6 +142,11 @@ public class PangkatGol extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jLabel1.setText("PEMERINTAH KOTA METRO");
@@ -249,6 +257,11 @@ public class PangkatGol extends javax.swing.JFrame {
         );
 
         ButtonHome.setText("Home");
+        ButtonHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonHomeActionPerformed(evt);
+            }
+        });
 
         ButtonRefresh.setText("Refresh");
         ButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -389,6 +402,18 @@ public class PangkatGol extends javax.swing.JFrame {
         loadTable();
     }//GEN-LAST:event_ButtonRefreshActionPerformed
 
+    private void ButtonHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonHomeActionPerformed
+        new MenuUtama().setVisible(true);
+        
+        this.dispose();
+    }//GEN-LAST:event_ButtonHomeActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        new MenuUtama().setVisible(true);
+        
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -442,8 +467,6 @@ public class PangkatGol extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     // End of variables declaration//GEN-END:variables
 }
