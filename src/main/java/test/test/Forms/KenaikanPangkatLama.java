@@ -6,26 +6,26 @@
 package test.test.Forms;
 
 import com.toedter.calendar.JDateChooser;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
 import test.test.Classes.MendekatiTMT;
-import test.test.Models.GajiBerkalaModel;
 import test.test.Models.KenaikanPangkatModel;
 import test.test.Models.PegawaiModel;
 import test.test.Models.PangkatGolModel;
@@ -34,7 +34,15 @@ import test.test.Models.PangkatGolModel;
  *
  * @author user
  */
-public class GajiBerkala extends javax.swing.JInternalFrame {
+public class KenaikanPangkatLama extends javax.swing.JInternalFrame {
+    private List<Integer> comboPangkatGolBaruID = new ArrayList<Integer>();
+    private int comboPangkatGolBaruIndex;
+    private int selectedComboPangkatGolBaruIndex;
+
+    private List<Integer> comboPangkatGolLamaID = new ArrayList<Integer>();
+    private int comboPangkatGolLamaIndex;
+    private int selectedComboPangkatGolLamaIndex;
+
     private List<Integer> comboPegawaiID = new ArrayList<Integer>();
     private int comboPegawaiIndex;
     private int selectedComboPegawaiIndex;
@@ -46,7 +54,7 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
     /**
      * Creates new form Orang
      */
-    public GajiBerkala() {
+    public KenaikanPangkatLama() {
         initComponents();
         
         loadTable();
@@ -62,6 +70,9 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                     Base.open();
                     PegawaiModel p = PegawaiModel.findById(selectedComboPegawaiIndex);
                     Base.close();
+
+                    int pangkatLamaIndex = comboPangkatGolBaruID.indexOf(Integer.parseInt(p.get("id_pangkatgol").toString()));
+                    ComboPangkatGolLama.setSelectedIndex(pangkatLamaIndex);
                 }
             }
         });
@@ -72,7 +83,7 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
                 if (chooser.getCalendar() != null) {
                     Calendar calendar = chooser.getCalendar();
-                    calendar.add(Calendar.YEAR, 4);
+                    calendar.add(Calendar.YEAR, 2);
                     YAD.setText(sdf.format(calendar.getTime()));
                 }
             }
@@ -80,10 +91,21 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
     }
     
     public void loadComboBox() {
+        ComboPangkatGolBaru.removeAllItems();
+        ComboPangkatGolLama.removeAllItems();
         ComboPegawai.removeAllItems();
         
         Base.open();
+        LazyList<PangkatGolModel> pangkatGols = PangkatGolModel.findAll();
         LazyList<PegawaiModel> pegawais = PegawaiModel.findAll();
+        
+        for(PangkatGolModel pangkatGol : pangkatGols) {
+            comboPangkatGolBaruID.add(Integer.parseInt(pangkatGol.getString("id")));
+            ComboPangkatGolBaru.addItem(pangkatGol.getString("pangkatgol"));
+            
+            comboPangkatGolLamaID.add(Integer.parseInt(pangkatGol.getString("id")));
+            ComboPangkatGolLama.addItem(pangkatGol.getString("pangkatgol"));
+        }
         
         for(PegawaiModel pegawai : pegawais) {
             comboPegawaiID.add(Integer.parseInt(pegawai.getString("id")));
@@ -97,37 +119,39 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         model = new DefaultTableModel();
         
         Base.open();
-        LazyList<GajiBerkalaModel> gajiBerkalas = GajiBerkalaModel.findAll();
+        LazyList<KenaikanPangkatModel> kenaikanPangkats = KenaikanPangkatModel.findAll();
         Base.close();
         
         model.addColumn("#ID");
         model.addColumn("NIP");
         model.addColumn("Nama");
-//        model.addColumn("Gaji Lama");
-//        model.addColumn("Gaji Baru");
+        model.addColumn("Pangkat Golongan Lama");
+        model.addColumn("Pangkat Golongan Baru");
         model.addColumn("TMT");
         model.addColumn("YAD");
 
         Base.open();
-        for(GajiBerkalaModel gajiBerkala : gajiBerkalas) {
-            PegawaiModel pegawai = gajiBerkala.parent(PegawaiModel.class);
+        for(KenaikanPangkatModel kenaikanPangkat : kenaikanPangkats) {
+            PegawaiModel pegawai = kenaikanPangkat.parent(PegawaiModel.class);
+            PangkatGolModel PangkatGolLama = PangkatGolModel.findById(kenaikanPangkat.getString("id_pangkat_lama"));
+            PangkatGolModel PangkatGolBaru = PangkatGolModel.findById(kenaikanPangkat.getString("id_pangkat_baru"));
             
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             
             try {
-                Date tmt = format.parse(gajiBerkala.getString("tmt"));
-                Date yad = format.parse(gajiBerkala.getString("yad"));
+                Date tmt = format.parse(kenaikanPangkat.getString("tmt"));
+                Date yad = format.parse(kenaikanPangkat.getString("yad"));
                 
                 SimpleDateFormat parsedFormat = new SimpleDateFormat("dd-MM-YYYY");
                 String parsedtmt = parsedFormat.format(tmt);
                 String parsedyad = parsedFormat.format(yad);
                 
                 model.addRow(new Object[]{
-                    gajiBerkala.getId(),
+                    kenaikanPangkat.getId(),
                     pegawai.getString("nip"),
                     pegawai.getString("nama"),
-//                    NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama"))),
-//                    NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru"))),
+                    PangkatGolLama.getString("pangkatgol"),
+                    PangkatGolBaru.getString("pangkatgol"),
                     parsedtmt,
                     parsedyad,
                 });                
@@ -140,7 +164,7 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         
         TableKenaikanPangkat.setModel(model);
         
-        MendekatiTMT colorRenderer = new MendekatiTMT(gajiBerkalas, "gajiBerkala");
+        MendekatiTMT colorRenderer = new MendekatiTMT(kenaikanPangkats, "kenaikanPangkat");
         TableKenaikanPangkat.setDefaultRenderer(Object.class, colorRenderer);
         
         setState("index");
@@ -148,9 +172,9 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
     
     private void hapusData() {
         Base.open();
-        GajiBerkalaModel gajiBerkala = GajiBerkalaModel.findById(ID);
+        KenaikanPangkatModel kenaikanPangkat = KenaikanPangkatModel.findById(ID);
         try {
-            gajiBerkala.delete();
+            kenaikanPangkat.delete();
         } catch (DBException e) {
             JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
         }
@@ -179,17 +203,18 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         SimpleDateFormat parsedFormat = new SimpleDateFormat("yyyy-MM-dd");
         Base.open();
         try {
-            GajiBerkalaModel GajiBerkala = new GajiBerkalaModel();
-            GajiBerkala.set("tmt", dateFormat.format(TMT.getDate()));
-            GajiBerkala.set("yad", parsedFormat.format(format.parse(YAD.getText())));
-            GajiBerkala.set("id_pegawai", selectedComboPegawaiIndex);
-//            GajiBerkala.set("gaji_pokok_lama", SpinnerLama.getValue());
-//            GajiBerkala.set("gaji_pokok_baru", SpinnerBaru.getValue());
-            GajiBerkala.save();
+            KenaikanPangkatModel kenaikanPangkat = new KenaikanPangkatModel();
+            kenaikanPangkat.set("tmt", dateFormat.format(TMT.getDate()));
+            kenaikanPangkat.set("yad", parsedFormat.format(format.parse(YAD.getText())));
+            kenaikanPangkat.set("id_pegawai", selectedComboPegawaiIndex);
+            kenaikanPangkat.set("id_pangkat_lama", selectedComboPangkatGolLamaIndex);
+            kenaikanPangkat.set("id_pangkat_baru", selectedComboPangkatGolBaruIndex);
+            kenaikanPangkat.save();
             
-            PegawaiModel pegawai = GajiBerkala.parent(PegawaiModel.class);
-            pegawai.set("tmt_gaji", dateFormat.format(TMT.getDate()));
-            pegawai.set("yad_gaji", parsedFormat.format(format.parse(YAD.getText())));
+            PegawaiModel pegawai = kenaikanPangkat.parent(PegawaiModel.class);
+            pegawai.set("id_pangkatgol", selectedComboPangkatGolBaruIndex);
+            pegawai.set("tmt_pangkat", dateFormat.format(TMT.getDate()));
+            pegawai.set("yad_pangkat", parsedFormat.format(format.parse(YAD.getText())));
             pegawai.save();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -203,13 +228,17 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         SimpleDateFormat parsedFormat = new SimpleDateFormat("yyyy-MM-dd");
         Base.open();
         try {
-            GajiBerkalaModel GajiBerkala = GajiBerkalaModel.findById(ID);
-            GajiBerkala.set("tmt", dateFormat.format(TMT.getDate()));
-            GajiBerkala.set("yad", parsedFormat.format(format.parse(YAD.getText())));
-            GajiBerkala.set("id_pegawai", selectedComboPegawaiIndex);
-//            GajiBerkala.set("gaji_pokok_lama", SpinnerLama.getValue());
-//            GajiBerkala.set("gaji_pokok_baru", SpinnerBaru.getValue());
-            GajiBerkala.save();
+            KenaikanPangkatModel kenaikanPangkat = KenaikanPangkatModel.findById(ID);
+            kenaikanPangkat.set("tmt", dateFormat.format(TMT.getDate()));
+            kenaikanPangkat.set("yad", parsedFormat.format(format.parse(YAD.getText())));
+            kenaikanPangkat.set("id_pegawai", selectedComboPegawaiIndex);
+            kenaikanPangkat.set("id_pangkat_lama", selectedComboPangkatGolLamaIndex);
+            kenaikanPangkat.set("id_pangkat_baru", selectedComboPangkatGolBaruIndex);
+            kenaikanPangkat.save();
+            
+//            PegawaiModel pegawai = kenaikanPangkat.parent(PegawaiModel.class);
+//            pegawai.set("id_pangkatgol", selectedComboPangkatGolBaruIndex);
+//            pegawai.save();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -218,10 +247,10 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
 
     private void resetForm() {
         ComboPegawai.setSelectedIndex(0);
+        ComboPangkatGolLama.setSelectedIndex(0);
+        ComboPangkatGolBaru.setSelectedIndex(0);
         TMT.setDate(null);
         YAD.setText("");
-//        SpinnerLama.setValue(0);
-//        SpinnerBaru.setValue(0);
     }
 
     /**
@@ -240,14 +269,17 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
         TableKenaikanPangkat = new javax.swing.JTable();
         ComboPegawai = new javax.swing.JComboBox<>();
         LabelPangkatGol = new javax.swing.JLabel();
+        ComboPangkatGolBaru = new javax.swing.JComboBox<>();
+        LabelPangkatGol1 = new javax.swing.JLabel();
+        LabelPangkatGol2 = new javax.swing.JLabel();
+        ComboPangkatGolLama = new javax.swing.JComboBox<>();
         LabelPangkatGol3 = new javax.swing.JLabel();
         TMT = new com.toedter.calendar.JDateChooser();
         LabelPangkatGol4 = new javax.swing.JLabel();
         YAD = new javax.swing.JTextField();
 
         setClosable(true);
-        setTitle("Gaji Berkala");
-        setToolTipText("");
+        setTitle("Kenaikan Pangkat");
 
         ButtonTambahUbah.setText("Tambah");
         ButtonTambahUbah.addActionListener(new java.awt.event.ActionListener() {
@@ -293,6 +325,34 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
 
         LabelPangkatGol.setText("Pegawai");
 
+        ComboPangkatGolBaru.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ComboPangkatGolBaru.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                ComboPangkatGolBaruItemStateChanged(evt);
+            }
+        });
+        ComboPangkatGolBaru.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboPangkatGolBaruActionPerformed(evt);
+            }
+        });
+
+        LabelPangkatGol1.setText("Pangkat Baru");
+
+        LabelPangkatGol2.setText("Pangkat Lama");
+
+        ComboPangkatGolLama.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ComboPangkatGolLama.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                ComboPangkatGolLamaItemStateChanged(evt);
+            }
+        });
+        ComboPangkatGolLama.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboPangkatGolLamaActionPerformed(evt);
+            }
+        });
+
         LabelPangkatGol3.setText("TMT");
 
         TMT.setDateFormatString("dd-MM-yyyy");
@@ -310,16 +370,24 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                 .addComponent(ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 706, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(224, 224, 224)
+                .addGap(170, 170, 170)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(LabelPangkatGol)
                         .addGap(18, 18, 18)
                         .addComponent(ComboPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(LabelPangkatGol2)
+                        .addGap(18, 18, 18)
+                        .addComponent(ComboPangkatGolLama, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(LabelPangkatGol3)
                         .addGap(18, 18, 18)
                         .addComponent(TMT, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(LabelPangkatGol1)
+                        .addGap(18, 18, 18)
+                        .addComponent(ComboPangkatGolBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(ButtonTambahUbah)
@@ -338,7 +406,15 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ComboPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LabelPangkatGol))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ComboPangkatGolLama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LabelPangkatGol2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ComboPangkatGolBaru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LabelPangkatGol1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(LabelPangkatGol3)
                     .addComponent(TMT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -352,7 +428,7 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
                     .addComponent(ButtonTambahUbah))
                 .addGap(18, 18, 18)
                 .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+                .addContainerGap())
         );
 
         pack();
@@ -393,16 +469,16 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
             ID = model.getValueAt(i, 0).toString();
 
             Base.open();
-            GajiBerkalaModel gajiBerkala = GajiBerkalaModel.findById(ID);
+            KenaikanPangkatModel kenaikanPangkat = KenaikanPangkatModel.findById(ID);
             Base.close();
             
-//            SpinnerLama.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama")));
-//            SpinnerBaru.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru")));
-            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(gajiBerkala.getString("id_pegawai"))));
+            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(kenaikanPangkat.getString("id_pegawai"))));
+            ComboPangkatGolLama.setSelectedIndex(comboPangkatGolLamaID.indexOf(Integer.parseInt(kenaikanPangkat.getString("id_pangkat_lama"))));
+            ComboPangkatGolBaru.setSelectedIndex(comboPangkatGolBaruID.indexOf(Integer.parseInt(kenaikanPangkat.getString("id_pangkat_baru"))));
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             
             try {
-                TMT.setDate(format.parse(gajiBerkala.getString("tmt")));
+                TMT.setDate(format.parse(kenaikanPangkat.getString("tmt")));
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
@@ -422,12 +498,38 @@ public class GajiBerkala extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_ComboPegawaiItemStateChanged
 
+    private void ComboPangkatGolBaruItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ComboPangkatGolBaruItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboPangkatGolBaruItemStateChanged
+
+    private void ComboPangkatGolBaruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboPangkatGolBaruActionPerformed
+        comboPangkatGolBaruIndex = ComboPangkatGolBaru.getSelectedIndex();
+        if (comboPangkatGolBaruIndex >= 0) {
+            selectedComboPangkatGolBaruIndex = comboPangkatGolBaruID.get(comboPangkatGolBaruIndex);
+        }
+    }//GEN-LAST:event_ComboPangkatGolBaruActionPerformed
+
+    private void ComboPangkatGolLamaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ComboPangkatGolLamaItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboPangkatGolLamaItemStateChanged
+
+    private void ComboPangkatGolLamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboPangkatGolLamaActionPerformed
+        comboPangkatGolLamaIndex = ComboPangkatGolLama.getSelectedIndex();
+        if (comboPangkatGolLamaIndex >= 0) {
+            selectedComboPangkatGolLamaIndex = comboPangkatGolLamaID.get(comboPangkatGolLamaIndex);
+        }
+    }//GEN-LAST:event_ComboPangkatGolLamaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonResetHapus;
     private javax.swing.JButton ButtonTambahUbah;
+    private javax.swing.JComboBox<String> ComboPangkatGolBaru;
+    private javax.swing.JComboBox<String> ComboPangkatGolLama;
     private javax.swing.JComboBox<String> ComboPegawai;
     private javax.swing.JLabel LabelPangkatGol;
+    private javax.swing.JLabel LabelPangkatGol1;
+    private javax.swing.JLabel LabelPangkatGol2;
     private javax.swing.JLabel LabelPangkatGol3;
     private javax.swing.JLabel LabelPangkatGol4;
     private javax.swing.JScrollPane ScrollPane;

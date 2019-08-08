@@ -24,8 +24,8 @@ import javax.swing.table.DefaultTableModel;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
+import test.test.Classes.MendekatiTMT;
 import test.test.Models.GajiBerkalaModel;
-import test.test.Models.UsulanModel;
 import test.test.Models.KenaikanPangkatModel;
 import test.test.Models.PegawaiModel;
 import test.test.Models.PangkatGolModel;
@@ -34,7 +34,7 @@ import test.test.Models.PangkatGolModel;
  *
  * @author user
  */
-public class Usulan extends javax.swing.JInternalFrame {
+public class GajiBerkalaLama extends javax.swing.JInternalFrame {
     private List<Integer> comboPegawaiID = new ArrayList<Integer>();
     private int comboPegawaiIndex;
     private int selectedComboPegawaiIndex;
@@ -46,7 +46,7 @@ public class Usulan extends javax.swing.JInternalFrame {
     /**
      * Creates new form Orang
      */
-    public Usulan() {
+    public GajiBerkalaLama() {
         initComponents();
         
         loadTable();
@@ -62,6 +62,18 @@ public class Usulan extends javax.swing.JInternalFrame {
                     Base.open();
                     PegawaiModel p = PegawaiModel.findById(selectedComboPegawaiIndex);
                     Base.close();
+                }
+            }
+        });
+        
+        TMT.addPropertyChangeListener("date",new PropertyChangeListener  () { 
+            public void propertyChange(PropertyChangeEvent e){
+                JDateChooser chooser=(JDateChooser)e.getSource();
+                SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+                if (chooser.getCalendar() != null) {
+                    Calendar calendar = chooser.getCalendar();
+                    calendar.add(Calendar.YEAR, 4);
+                    YAD.setText(sdf.format(calendar.getTime()));
                 }
             }
         });
@@ -85,33 +97,39 @@ public class Usulan extends javax.swing.JInternalFrame {
         model = new DefaultTableModel();
         
         Base.open();
-        LazyList<UsulanModel> usulans = UsulanModel.findAll();
+        LazyList<GajiBerkalaModel> gajiBerkalas = GajiBerkalaModel.findAll();
         Base.close();
         
         model.addColumn("#ID");
         model.addColumn("NIP");
         model.addColumn("Nama");
-        model.addColumn("Tanggal");
-        model.addColumn("Nomor");
+//        model.addColumn("Gaji Lama");
+//        model.addColumn("Gaji Baru");
+        model.addColumn("TMT");
+        model.addColumn("YAD");
 
         Base.open();
-        for(UsulanModel usulan : usulans) {
-            PegawaiModel pegawai = usulan.parent(PegawaiModel.class);
+        for(GajiBerkalaModel gajiBerkala : gajiBerkalas) {
+            PegawaiModel pegawai = gajiBerkala.parent(PegawaiModel.class);
             
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             
             try {
-                Date tanggal = format.parse(usulan.getString("tanggal"));
+                Date tmt = format.parse(gajiBerkala.getString("tmt"));
+                Date yad = format.parse(gajiBerkala.getString("yad"));
                 
                 SimpleDateFormat parsedFormat = new SimpleDateFormat("dd-MM-YYYY");
-                String parsedtanggal = parsedFormat.format(tanggal);
+                String parsedtmt = parsedFormat.format(tmt);
+                String parsedyad = parsedFormat.format(yad);
                 
                 model.addRow(new Object[]{
-                    usulan.getId(),
+                    gajiBerkala.getId(),
                     pegawai.getString("nip"),
                     pegawai.getString("nama"),
-                    parsedtanggal,
-                    usulan.getString("nomor")
+//                    NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama"))),
+//                    NumberFormat.getNumberInstance(Locale.US).format(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru"))),
+                    parsedtmt,
+                    parsedyad,
                 });                
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
@@ -122,14 +140,17 @@ public class Usulan extends javax.swing.JInternalFrame {
         
         TableKenaikanPangkat.setModel(model);
         
+        MendekatiTMT colorRenderer = new MendekatiTMT(gajiBerkalas, "gajiBerkala");
+        TableKenaikanPangkat.setDefaultRenderer(Object.class, colorRenderer);
+        
         setState("index");
     }
     
     private void hapusData() {
         Base.open();
-        UsulanModel usulan = UsulanModel.findById(ID);
+        GajiBerkalaModel gajiBerkala = GajiBerkalaModel.findById(ID);
         try {
-            usulan.delete();
+            gajiBerkala.delete();
         } catch (DBException e) {
             JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
         }
@@ -158,11 +179,18 @@ public class Usulan extends javax.swing.JInternalFrame {
         SimpleDateFormat parsedFormat = new SimpleDateFormat("yyyy-MM-dd");
         Base.open();
         try {
-            UsulanModel Usulan = new UsulanModel();
-            Usulan.set("tanggal", dateFormat.format(Tanggal.getDate()));
-            Usulan.set("nomor", TextNomor.getText());
-            Usulan.set("id_pegawai", selectedComboPegawaiIndex);
-            Usulan.save();
+            GajiBerkalaModel GajiBerkala = new GajiBerkalaModel();
+            GajiBerkala.set("tmt", dateFormat.format(TMT.getDate()));
+            GajiBerkala.set("yad", parsedFormat.format(format.parse(YAD.getText())));
+            GajiBerkala.set("id_pegawai", selectedComboPegawaiIndex);
+//            GajiBerkala.set("gaji_pokok_lama", SpinnerLama.getValue());
+//            GajiBerkala.set("gaji_pokok_baru", SpinnerBaru.getValue());
+            GajiBerkala.save();
+            
+            PegawaiModel pegawai = GajiBerkala.parent(PegawaiModel.class);
+            pegawai.set("tmt_gaji", dateFormat.format(TMT.getDate()));
+            pegawai.set("yad_gaji", parsedFormat.format(format.parse(YAD.getText())));
+            pegawai.save();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -175,11 +203,13 @@ public class Usulan extends javax.swing.JInternalFrame {
         SimpleDateFormat parsedFormat = new SimpleDateFormat("yyyy-MM-dd");
         Base.open();
         try {
-            UsulanModel Usulan = UsulanModel.findById(ID);
-            Usulan.set("tanggal", dateFormat.format(Tanggal.getDate()));
-            Usulan.set("nomor", TextNomor.getText());
-            Usulan.set("id_pegawai", selectedComboPegawaiIndex);
-            Usulan.save();
+            GajiBerkalaModel GajiBerkala = GajiBerkalaModel.findById(ID);
+            GajiBerkala.set("tmt", dateFormat.format(TMT.getDate()));
+            GajiBerkala.set("yad", parsedFormat.format(format.parse(YAD.getText())));
+            GajiBerkala.set("id_pegawai", selectedComboPegawaiIndex);
+//            GajiBerkala.set("gaji_pokok_lama", SpinnerLama.getValue());
+//            GajiBerkala.set("gaji_pokok_baru", SpinnerBaru.getValue());
+            GajiBerkala.save();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -188,8 +218,10 @@ public class Usulan extends javax.swing.JInternalFrame {
 
     private void resetForm() {
         ComboPegawai.setSelectedIndex(0);
-        Tanggal.setDate(null);
-        TextNomor.setText("");
+        TMT.setDate(null);
+        YAD.setText("");
+//        SpinnerLama.setValue(0);
+//        SpinnerBaru.setValue(0);
     }
 
     /**
@@ -209,12 +241,12 @@ public class Usulan extends javax.swing.JInternalFrame {
         ComboPegawai = new javax.swing.JComboBox<>();
         LabelPangkatGol = new javax.swing.JLabel();
         LabelPangkatGol3 = new javax.swing.JLabel();
-        Tanggal = new com.toedter.calendar.JDateChooser();
+        TMT = new com.toedter.calendar.JDateChooser();
         LabelPangkatGol4 = new javax.swing.JLabel();
-        TextNomor = new javax.swing.JTextField();
+        YAD = new javax.swing.JTextField();
 
         setClosable(true);
-        setTitle("Usulan");
+        setTitle("Gaji Berkala");
         setToolTipText("");
 
         ButtonTambahUbah.setText("Tambah");
@@ -261,65 +293,66 @@ public class Usulan extends javax.swing.JInternalFrame {
 
         LabelPangkatGol.setText("Pegawai");
 
-        LabelPangkatGol3.setText("Tanggal");
+        LabelPangkatGol3.setText("TMT");
 
-        Tanggal.setDateFormatString("dd-MM-yyyy");
+        TMT.setDateFormatString("dd-MM-yyyy");
 
-        LabelPangkatGol4.setText("Nomor");
+        LabelPangkatGol4.setText("YAD");
+
+        YAD.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addComponent(ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 706, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(224, 224, 224)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(LabelPangkatGol)
+                        .addGap(18, 18, 18)
+                        .addComponent(ComboPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(LabelPangkatGol)
-                                .addGap(18, 18, 18)
-                                .addComponent(ComboPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(LabelPangkatGol3)
-                                .addGap(18, 18, 18)
-                                .addComponent(Tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(ButtonTambahUbah)
-                                    .addGap(127, 127, 127)
-                                    .addComponent(ButtonResetHapus))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(LabelPangkatGol4)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(TextNomor, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addComponent(LabelPangkatGol3)
+                        .addGap(18, 18, 18)
+                        .addComponent(TMT, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(ButtonTambahUbah)
+                            .addGap(127, 127, 127)
+                            .addComponent(ButtonResetHapus))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(LabelPangkatGol4)
+                            .addGap(18, 18, 18)
+                            .addComponent(YAD, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ComboPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LabelPangkatGol))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(LabelPangkatGol3)
-                    .addComponent(Tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TMT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(LabelPangkatGol4)
-                    .addComponent(TextNomor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(YAD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonResetHapus, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                     .addComponent(ButtonTambahUbah))
                 .addGap(18, 18, 18)
                 .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -327,20 +360,16 @@ public class Usulan extends javax.swing.JInternalFrame {
 
     private void ButtonTambahUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTambahUbahActionPerformed
         if (state.equals("index")) {
-            if (Tanggal.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Form Tanggal Masih Kosong !!!");
-            } else if (TextNomor.getText().trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "Form Nomor Masih Kosong !!!");
+            if (TMT.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Form TMT Masih Kosong !!!");
             } else {
                 tambahData();
                 resetForm();
                 loadTable();
             }
         } else {
-            if (Tanggal.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Form Tanggal Masih Kosong !!!");
-            } else if (TextNomor.getText().trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "Form Nomor Masih Kosong !!!");
+            if (TMT.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Form TMT Masih Kosong !!!");
             } else {
                 ubahData(ID);
                 resetForm();
@@ -364,15 +393,16 @@ public class Usulan extends javax.swing.JInternalFrame {
             ID = model.getValueAt(i, 0).toString();
 
             Base.open();
-            UsulanModel usulan = UsulanModel.findById(ID);
+            GajiBerkalaModel gajiBerkala = GajiBerkalaModel.findById(ID);
             Base.close();
             
-            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(usulan.getString("id_pegawai"))));
-            TextNomor.setText(usulan.getString("nomor"));
+//            SpinnerLama.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama")));
+//            SpinnerBaru.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru")));
+            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(gajiBerkala.getString("id_pegawai"))));
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             
             try {
-                Tanggal.setDate(format.parse(usulan.getString("tanggal")));
+                TMT.setDate(format.parse(gajiBerkala.getString("tmt")));
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
@@ -401,9 +431,9 @@ public class Usulan extends javax.swing.JInternalFrame {
     private javax.swing.JLabel LabelPangkatGol3;
     private javax.swing.JLabel LabelPangkatGol4;
     private javax.swing.JScrollPane ScrollPane;
+    private com.toedter.calendar.JDateChooser TMT;
     private javax.swing.JTable TableKenaikanPangkat;
-    private com.toedter.calendar.JDateChooser Tanggal;
-    private javax.swing.JTextField TextNomor;
+    private javax.swing.JTextField YAD;
     private org.jdatepicker.util.JDatePickerUtil jDatePickerUtil1;
     // End of variables declaration//GEN-END:variables
 }

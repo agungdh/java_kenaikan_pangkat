@@ -14,12 +14,12 @@ import org.apache.commons.codec.digest.DigestUtils;
  *
  * @author user
  */
-public class Login extends javax.swing.JInternalFrame {
+public class LoginLama extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form Log
      */
-    public Login() {
+    public LoginLama() {
         initComponents();
     }
 

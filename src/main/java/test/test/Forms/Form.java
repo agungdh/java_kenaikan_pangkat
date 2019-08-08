@@ -174,31 +174,31 @@ public class Form extends javax.swing.JFrame {
     }//GEN-LAST:event_SubMenuLogoutActionPerformed
 
     private void SubMenuPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuPegawaiActionPerformed
-        Pegawai display = new Pegawai();
+        PegawaiLama display = new PegawaiLama();
         DesktopPane.add(display);
         display.show();
     }//GEN-LAST:event_SubMenuPegawaiActionPerformed
 
     private void SubMenuUsulanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuUsulanActionPerformed
-        Usulan display = new Usulan();
+        UsulanLama display = new UsulanLama();
         DesktopPane.add(display);
         display.show();
     }//GEN-LAST:event_SubMenuUsulanActionPerformed
 
     private void SubMenuKenaikanPangkatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuKenaikanPangkatActionPerformed
-        KenaikanPangkat display = new KenaikanPangkat();
+        KenaikanPangkatLama display = new KenaikanPangkatLama();
         DesktopPane.add(display);
         display.show();
     }//GEN-LAST:event_SubMenuKenaikanPangkatActionPerformed
 
     private void SubMenuGajiBerkalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubMenuGajiBerkalaActionPerformed
-        GajiBerkala display = new GajiBerkala();
+        GajiBerkalaLama display = new GajiBerkalaLama();
         DesktopPane.add(display);
         display.show();
     }//GEN-LAST:event_SubMenuGajiBerkalaActionPerformed
 
     public void Init() {
-        Login login = new Login();
+        LoginLama login = new LoginLama();
         DesktopPane.add(login);
         login.show();
 

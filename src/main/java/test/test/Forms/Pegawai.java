@@ -5,172 +5,68 @@
  */
 package test.test.Forms;
 
-import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JTextFieldDateEditor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.awt.Color;
+import java.awt.Image;
 import javax.swing.BorderFactory;
-import javax.swing.JDesktopPane;
-import javax.swing.JFormattedTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.JRootPane;
 import javax.swing.table.DefaultTableModel;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
-import test.test.Models.PegawaiModel;
 import test.test.Models.PangkatGolModel;
-import javax.swing.text.NumberFormatter;
-import test.test.Classes.MendekatiTMT;
 
 /**
  *
  * @author user
  */
-public class Pegawai extends javax.swing.JInternalFrame {
-    private List<Integer> comboPangkatGolID = new ArrayList<Integer>();
-    private int comboPangkatGolIndex;
-    private int selectedComboPangkatGolIndex;
+public class Pegawai extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private String ID;
     private String state;
-    
     /**
-     * Creates new form Orang
+     * Creates new form PangkatGol
      */
     public Pegawai() {
         initComponents();
         
+        String path = "src/main/resources/assets/logometro.png";
+        ImageIcon MyImage = new ImageIcon(path);
+        Image img = MyImage.getImage();
+        Image newImg = img.getScaledInstance(Logo.getWidth(), Logo.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
+        Logo.setIcon(image);
+        
         loadTable();
-        
-        loadPangkatGol();
-        
-        formatTextInteger();
-        
-        TMTPangkat.addPropertyChangeListener("date",new PropertyChangeListener  () { 
-            public void propertyChange(PropertyChangeEvent e){
-                JDateChooser chooser=(JDateChooser)e.getSource();
-                SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
-                if (chooser.getCalendar() != null) {
-                    Calendar calendar = chooser.getCalendar();
-                    calendar.add(Calendar.YEAR, 2);
-                    YADPangkat.setText(sdf.format(calendar.getTime()));
-                }
-            }
-        });
-
-        TMTGaji.addPropertyChangeListener("date",new PropertyChangeListener  () { 
-            public void propertyChange(PropertyChangeEvent e){
-                JDateChooser chooser=(JDateChooser)e.getSource();
-                SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
-                if (chooser.getCalendar() != null) {
-                    Calendar calendar = chooser.getCalendar();
-                    calendar.add(Calendar.YEAR, 4);
-                    YADGaji.setText(sdf.format(calendar.getTime()));
-                }
-            }
-        });
-        
     }
     
-    public void loadPangkatGol() {
-        ComboPangkatGol.removeAllItems();
+    private void loadTable() {
+        model = new DefaultTableModel();
         
         Base.open();
         LazyList<PangkatGolModel> pangkatGols = PangkatGolModel.findAll();
-        
-        for(PangkatGolModel pangkatGol : pangkatGols) {
-            comboPangkatGolID.add(Integer.parseInt(pangkatGol.getString("id")));
-            ComboPangkatGol.addItem(pangkatGol.getString("pangkatgol"));
-        }
         Base.close();
-    }
-    
-    private void loadTableHelper(LazyList<PegawaiModel> pegawais) {
-        model = new DefaultTableModel();
-        
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         
         model.addColumn("#ID");
-        model.addColumn("NIP");
-        model.addColumn("Nama");
         model.addColumn("Pangkat Golongan");
-        model.addColumn("TMT Pangkat");
-        model.addColumn("YAD Pangkat");
-        model.addColumn("TMT Gaji");
-        model.addColumn("YAD Gaji");
         
         Base.open();
-        try {
-
-            for(PegawaiModel pegawai : pegawais) {
-                Date tmtpangkat = format.parse(pegawai.getString("tmt_pangkat"));
-                Date yadpangkat = format.parse(pegawai.getString("yad_pangkat"));
-                Date tmtgaji = format.parse(pegawai.getString("tmt_gaji"));
-                Date yadgaji = format.parse(pegawai.getString("yad_gaji"));
-                
-                SimpleDateFormat parsedFormat = new SimpleDateFormat("dd-MM-YYYY");
-                
-                String parsedtmtpangkat = parsedFormat.format(tmtpangkat);    
-                String parsedyadpangkat = parsedFormat.format(yadpangkat);    
-                String parsedtmtgaji = parsedFormat.format(tmtgaji);    
-                String parsedyadgaji = parsedFormat.format(yadgaji);    
-                
-                PangkatGolModel pangkatGol = pegawai.parent(PangkatGolModel.class);
-                model.addRow(new Object[]{pegawai.getId(), pegawai.getString("nip"), pegawai.getString("nama"), pangkatGol.getString("pangkatgol"), parsedtmtpangkat, parsedyadpangkat,parsedtmtgaji, parsedyadgaji});
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+        for(PangkatGolModel pangkatGol : pangkatGols) {
+            model.addRow(new Object[]{pangkatGol.getId(), pangkatGol.getString("pangkatgol")});
         }
         Base.close();
         
-        TablePegawai.setModel(model);
-        
-        MendekatiTMT colorRenderer = new MendekatiTMT(pegawais, "pegawai");
-        TablePegawai.setDefaultRenderer(Object.class, colorRenderer);
+        TablePangkatGol.setModel(model);
         
         setState("index");
     }
     
-    private void formatTextInteger() {
-       
-    }
-    
-    private void loadTable() {
-        Base.open();
-        LazyList<PegawaiModel> pegawais = PegawaiModel.findAll();
-        Base.close();
-        
-        loadTableHelper(pegawais);
-    }
-
-    private void loadTable(String cariNIP) {
-        Base.open();
-        LazyList<PegawaiModel> pegawais = PegawaiModel.where("nip like ?", '%' + cariNIP + '%');
-        Base.close();
-        
-        loadTableHelper(pegawais);
-    }
-
-    
     private void hapusData() {
         Base.open();
-        PegawaiModel pegawai = PegawaiModel.findById(ID);
+        PangkatGolModel pangkatGol = PangkatGolModel.findById(ID);
         try {
-            pegawai.delete();
+            pangkatGol.delete();
         } catch (DBException e) {
             JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
         }
@@ -193,56 +89,24 @@ public class Pegawai extends javax.swing.JInternalFrame {
         }
     }
     
-    private void tambahData(String nip, String nama) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        SimpleDateFormat parsedFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private void tambahData(String pangkatgol) {
         Base.open();
-        try {
-            PegawaiModel pegawai = new PegawaiModel();
-            pegawai.set("nip", nip);
-            pegawai.set("nama", nama);
-            pegawai.set("id_pangkatgol", selectedComboPangkatGolIndex);
-            pegawai.set("tmt_pangkat", dateFormat.format(TMTPangkat.getDate()));
-            pegawai.set("yad_pangkat", parsedFormat.format(format.parse(YADPangkat.getText())));
-            pegawai.set("tmt_gaji", dateFormat.format(TMTGaji.getDate()));
-            pegawai.set("yad_gaji", parsedFormat.format(format.parse(YADGaji.getText())));
-            pegawai.save();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
+        PangkatGolModel pangkatGol = new PangkatGolModel();
+        pangkatGol.set("pangkatgol", pangkatgol);
+        pangkatGol.save();
         Base.close();
     }
     
-    private void ubahData(String id, String nip, String nama) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        SimpleDateFormat parsedFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private void ubahData(String id, String pangkatgol) {
         Base.open();
-        try {
-            PegawaiModel pegawai = PegawaiModel.findById(id);
-            pegawai.set("nip", nip);
-            pegawai.set("nama", nama);
-            pegawai.set("id_pangkatgol", selectedComboPangkatGolIndex);
-            pegawai.set("tmt_pangkat", dateFormat.format(TMTPangkat.getDate()));
-            pegawai.set("yad_pangkat", parsedFormat.format(format.parse(YADPangkat.getText())));
-            pegawai.set("tmt_gaji", dateFormat.format(TMTGaji.getDate()));
-            pegawai.set("yad_gaji", parsedFormat.format(format.parse(YADGaji.getText())));
-            pegawai.save();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
+        PangkatGolModel pangkatGol = PangkatGolModel.findById(id);
+        pangkatGol.set("pangkatgol", pangkatgol);
+        pangkatGol.save();
         Base.close();
     }
 
     private void resetForm() {
-        TextNip.setText("");
-        TextNama.setText("");
-        TMTPangkat.setDate(null);
-        YADPangkat.setText("");
-        TMTGaji.setDate(null);
-        YADGaji.setText("");
-        ComboPangkatGol.setSelectedIndex(0);
+        TextPangkatGol.setText("");
     }
 
     /**
@@ -254,37 +118,72 @@ public class Pegawai extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ButtonTambahUbah = new javax.swing.JButton();
-        ButtonResetHapus = new javax.swing.JButton();
-        ScrollPane = new javax.swing.JScrollPane();
-        TablePegawai = new javax.swing.JTable();
-        LabelNip = new javax.swing.JLabel();
-        TextNip = new javax.swing.JTextField();
-        TextNama = new javax.swing.JTextField();
-        LabelNama = new javax.swing.JLabel();
-        ComboPangkatGol = new javax.swing.JComboBox<>();
-        LabelPangkatGol = new javax.swing.JLabel();
-        TextCari = new javax.swing.JTextField();
-        LabelCari = new javax.swing.JLabel();
-        TMTPangkat = new com.toedter.calendar.JDateChooser();
-        LabelPangkatGol3 = new javax.swing.JLabel();
-        LabelPangkatGol4 = new javax.swing.JLabel();
-        TMTGaji = new com.toedter.calendar.JDateChooser();
-        LabelPangkatGol5 = new javax.swing.JLabel();
-        LabelPangkatGol6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        YADGaji = new javax.swing.JTextField();
-        YADPangkat = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        Logo = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        LabelPangkatGol = new javax.swing.JLabel();
+        TextPangkatGol = new javax.swing.JTextField();
+        ButtonResetHapus = new javax.swing.JButton();
+        ButtonTambahUbah = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        ScrollPane = new javax.swing.JScrollPane();
+        TablePangkatGol = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        ButtonHome = new javax.swing.JButton();
+        ButtonRefresh = new javax.swing.JButton();
 
-        setClosable(true);
-        setTitle("Pegawai");
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
-        ButtonTambahUbah.setText("Tambah");
-        ButtonTambahUbah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonTambahUbahActionPerformed(evt);
-            }
-        });
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel1.setText("PEMERINTAH KOTA METRO");
+
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel2.setText("DINAS TENAGA KERJA DAN TRANSMIGRASI KOTA METRO");
+
+        jLabel3.setText("Alamat : Jl. KH. Dewantara No 155 Kota Metro");
+
+        jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel4.setText("APLIKASI KENAIKAN PANGKAT DAN GAJI BERKALA");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel5.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel5.setText("INPUT DATA PEGAWAI");
+
+        LabelPangkatGol.setText("Pangkat Golongan");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(LabelPangkatGol)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TextPangkatGol)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(86, 86, 86)
+                .addComponent(jLabel5)
+                .addContainerGap(144, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelPangkatGol)
+                    .addComponent(TextPangkatGol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
 
         ButtonResetHapus.setText("Reset");
         ButtonResetHapus.addActionListener(new java.awt.event.ActionListener() {
@@ -293,7 +192,27 @@ public class Pegawai extends javax.swing.JInternalFrame {
             }
         });
 
-        TablePegawai.setModel(new javax.swing.table.DefaultTableModel(
+        ButtonTambahUbah.setText("Tambah");
+        ButtonTambahUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonTambahUbahActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 14, Short.MAX_VALUE)
+        );
+
+        TablePangkatGol.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -301,168 +220,120 @@ public class Pegawai extends javax.swing.JInternalFrame {
 
             }
         ));
-        TablePegawai.getTableHeader().setReorderingAllowed(false);
-        TablePegawai.addMouseListener(new java.awt.event.MouseAdapter() {
+        TablePangkatGol.getTableHeader().setReorderingAllowed(false);
+        TablePangkatGol.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TablePegawaiMouseClicked(evt);
+                TablePangkatGolMouseClicked(evt);
             }
         });
-        ScrollPane.setViewportView(TablePegawai);
+        ScrollPane.setViewportView(TablePangkatGol);
 
-        LabelNip.setText("NIP");
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        LabelNama.setText("Nama");
+        jLabel6.setText("D-III SISTEM INFORMASI UNIVERSITAS MUHAMMADIYAH METRO");
 
-        ComboPangkatGol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        ComboPangkatGol.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                ComboPangkatGolItemStateChanged(evt);
-            }
-        });
-        ComboPangkatGol.addActionListener(new java.awt.event.ActionListener() {
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(190, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addGap(156, 156, 156))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel6))
+        );
+
+        ButtonHome.setText("Home");
+
+        ButtonRefresh.setText("Refresh");
+        ButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ComboPangkatGolActionPerformed(evt);
+                ButtonRefreshActionPerformed(evt);
             }
         });
-
-        LabelPangkatGol.setText("Pangkat Golongan");
-
-        TextCari.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TextCariActionPerformed(evt);
-            }
-        });
-
-        LabelCari.setText("Cari (NIP)");
-
-        TMTPangkat.setDateFormatString("dd-MM-yyyy");
-        TMTPangkat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                TMTPangkatMouseReleased(evt);
-            }
-        });
-
-        LabelPangkatGol3.setText("TMT");
-
-        LabelPangkatGol4.setText("YAD");
-
-        TMTGaji.setDateFormatString("dd-MM-yyyy");
-
-        LabelPangkatGol5.setText("TMT");
-
-        LabelPangkatGol6.setText("YAD");
-
-        jLabel1.setText("Gaji");
-
-        YADGaji.setEditable(false);
-
-        YADPangkat.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(164, 164, 164)
+                        .addComponent(ButtonHome))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(LabelNama)
-                                            .addComponent(LabelPangkatGol)
-                                            .addComponent(LabelNip))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(TextNip, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(ComboPangkatGol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(TextNama, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(LabelPangkatGol4)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(YADPangkat, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(LabelPangkatGol3)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(TMTPangkat, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(95, 95, 95)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(LabelPangkatGol5)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(TMTGaji, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(LabelPangkatGol6)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(YADGaji, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel1)
-                                                .addGap(213, 213, 213))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(107, 107, 107)
-                                        .addComponent(ButtonTambahUbah)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(ButtonResetHapus)))
-                                .addGap(0, 37, Short.MAX_VALUE))
-                            .addComponent(ScrollPane))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(LabelCari, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(TextCari, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(48, 48, 48)
+                                .addComponent(ButtonTambahUbah)
+                                .addGap(50, 50, 50)
+                                .addComponent(ButtonRefresh)
+                                .addGap(65, 65, 65)
+                                .addComponent(ButtonResetHapus)))
+                        .addGap(43, 43, 43)
+                        .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(149, 149, 149)
+                .addComponent(Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(54, 54, 54)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(107, 107, 107)
+                        .addComponent(jLabel1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(TextNip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(LabelNip))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(TextNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(LabelNama))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ComboPangkatGol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(LabelPangkatGol))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LabelPangkatGol3)
-                            .addComponent(TMTPangkat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LabelPangkatGol4)
-                            .addComponent(YADPangkat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LabelPangkatGol5)
-                            .addComponent(TMTGaji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(LabelPangkatGol6)
-                                .addGap(46, 46, 46)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(ButtonTambahUbah)
-                                    .addComponent(ButtonResetHapus)))
-                            .addComponent(YADGaji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TextCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(LabelCari))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3))
+                    .addComponent(Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ButtonHome)
+                    .addComponent(jLabel4))
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ButtonTambahUbah)
+                            .addComponent(ButtonResetHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ButtonRefresh))
+                        .addGap(78, 78, 78))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -471,30 +342,18 @@ public class Pegawai extends javax.swing.JInternalFrame {
 
     private void ButtonTambahUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTambahUbahActionPerformed
         if (state.equals("index")) {
-            if (TextNip.getText().trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "Form NIP Masih Kosong !!!");
-            } else if (TextNama.getText().trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "Form Nama Masih Kosong !!!");
-            } else if (TMTPangkat.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Form TMT Pangkat Masih Kosong !!!");
-            } else if (TMTGaji.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Form TMT Gaji Masih Kosong !!!");
+            if (TextPangkatGol.getText().trim().equals("")) {
+                JOptionPane.showMessageDialog(null, "Form Pangkat Golongan Masih Kosong !!!");
             } else {
-                tambahData(TextNip.getText(), TextNama.getText());
+                tambahData(TextPangkatGol.getText());
                 resetForm();
                 loadTable();
             }
         } else {
-            if (TextNip.getText().trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "Form NIP Masih Kosong !!!");
-            } else if (TextNama.getText().trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "Form Nama Masih Kosong !!!");
-            } else if (TMTPangkat.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Form TMT Pangkat Masih Kosong !!!");
-            } else if (TMTGaji.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Form TMT Gaji Masih Kosong !!!");
+            if (TextPangkatGol.getText().trim().equals("")) {
+                JOptionPane.showMessageDialog(null, "Form Pangkat Golongan Masih Kosong !!!");
             } else {
-                ubahData(ID, TextNip.getText(), TextNama.getText());
+                ubahData(ID, TextPangkatGol.getText());
                 resetForm();
                 loadTable();
             }
@@ -510,76 +369,80 @@ public class Pegawai extends javax.swing.JInternalFrame {
         resetForm();
     }//GEN-LAST:event_ButtonResetHapusActionPerformed
 
-    private void TablePegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablePegawaiMouseClicked
-        int i =TablePegawai.getSelectedRow();
+    private void TablePangkatGolMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablePangkatGolMouseClicked
+        int i =TablePangkatGol.getSelectedRow();
         if(i>=0){
             ID = model.getValueAt(i, 0).toString();
 
             Base.open();
-            PegawaiModel pegawai = PegawaiModel.findById(ID);
+            PangkatGolModel pangkatGol = PangkatGolModel.findById(ID);
             Base.close();
 
-            TextNip.setText(pegawai.getString("nip"));
-            TextNama.setText(pegawai.getString("nama"));
-            ComboPangkatGol.setSelectedIndex(comboPangkatGolID.indexOf(Integer.parseInt(pegawai.getString("id_pangkatgol"))));
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            
-            try {
-                TMTPangkat.setDate(format.parse(pegawai.getString("tmt_pangkat")));
-                TMTGaji.setDate(format.parse(pegawai.getString("tmt_gaji")));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-            
+            TextPangkatGol.setText(pangkatGol.getString("pangkatgol"));
+
             setState("edit");
         }
-    }//GEN-LAST:event_TablePegawaiMouseClicked
+    }//GEN-LAST:event_TablePangkatGolMouseClicked
 
-    private void ComboPangkatGolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboPangkatGolActionPerformed
-        comboPangkatGolIndex = ComboPangkatGol.getSelectedIndex();
-        if (comboPangkatGolIndex >= 0) {
-            selectedComboPangkatGolIndex = comboPangkatGolID.get(comboPangkatGolIndex);
+    private void ButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRefreshActionPerformed
+        resetForm();
+        loadTable();
+    }//GEN-LAST:event_ButtonRefreshActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Pegawai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Pegawai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Pegawai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Pegawai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_ComboPangkatGolActionPerformed
+        //</editor-fold>
+        //</editor-fold>
 
-    private void ComboPangkatGolItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ComboPangkatGolItemStateChanged
-        
-    }//GEN-LAST:event_ComboPangkatGolItemStateChanged
-
-    private void TextCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextCariActionPerformed
-        if (TextCari.getText().equals("")) {
-            loadTable();
-        } else {
-            loadTable(TextCari.getText());            
-        }
-    }//GEN-LAST:event_TextCariActionPerformed
-
-    private void TMTPangkatMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TMTPangkatMouseReleased
-        
-    }//GEN-LAST:event_TMTPangkatMouseReleased
-
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Pegawai().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonHome;
+    private javax.swing.JButton ButtonRefresh;
     private javax.swing.JButton ButtonResetHapus;
     private javax.swing.JButton ButtonTambahUbah;
-    private javax.swing.JComboBox<String> ComboPangkatGol;
-    private javax.swing.JLabel LabelCari;
-    private javax.swing.JLabel LabelNama;
-    private javax.swing.JLabel LabelNip;
     private javax.swing.JLabel LabelPangkatGol;
-    private javax.swing.JLabel LabelPangkatGol3;
-    private javax.swing.JLabel LabelPangkatGol4;
-    private javax.swing.JLabel LabelPangkatGol5;
-    private javax.swing.JLabel LabelPangkatGol6;
+    private javax.swing.JLabel Logo;
     private javax.swing.JScrollPane ScrollPane;
-    private com.toedter.calendar.JDateChooser TMTGaji;
-    private com.toedter.calendar.JDateChooser TMTPangkat;
-    private javax.swing.JTable TablePegawai;
-    private javax.swing.JTextField TextCari;
-    private javax.swing.JTextField TextNama;
-    private javax.swing.JTextField TextNip;
-    private javax.swing.JTextField YADGaji;
-    private javax.swing.JTextField YADPangkat;
+    private javax.swing.JTable TablePangkatGol;
+    private javax.swing.JTextField TextPangkatGol;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel5;
     // End of variables declaration//GEN-END:variables
 }
