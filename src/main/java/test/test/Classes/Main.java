@@ -21,6 +21,7 @@ import test.test.Models.KenaikanPangkatModel;
  */
 public class Main {
     public static void main(String args[]) {
-        new Form().setVisible(true);
+//        new Form().setVisible(true);
+        new PangkatGol().setVisible(true);
     }
 }
