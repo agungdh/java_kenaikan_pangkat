@@ -52,7 +52,6 @@ public class MendekatiTMT implements TableCellRenderer {
             boolean isSelected, boolean hasFocus, int row, int column) {
         Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table,
                 value, isSelected, hasFocus, row, column);
-        c.setBackground(Color.GREEN);
 
         int i = 0;
         List<Integer> yangHarusDimerahin = new ArrayList<Integer>();
@@ -107,6 +106,7 @@ public class MendekatiTMT implements TableCellRenderer {
                 c.setBackground(Color.RED);
             } else {
                 c.setBackground(Color.WHITE);
+                c.setForeground(Color.BLACK);
             }
             
             System.out.println(yangHarusDimerahin.toString());
@@ -163,6 +163,7 @@ public class MendekatiTMT implements TableCellRenderer {
                         c.setBackground(Color.RED);
                     } else {
                         c.setBackground(Color.WHITE);
+                        c.setForeground(Color.BLACK);
                     }
                     break;
 
