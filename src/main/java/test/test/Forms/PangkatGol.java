@@ -251,6 +251,11 @@ public class PangkatGol extends javax.swing.JFrame {
         ButtonHome.setText("Home");
 
         ButtonRefresh.setText("Refresh");
+        ButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonRefreshActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -380,6 +385,11 @@ public class PangkatGol extends javax.swing.JFrame {
             setState("edit");
         }
     }//GEN-LAST:event_TablePangkatGolMouseClicked
+
+    private void ButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRefreshActionPerformed
+        resetForm();
+        loadTable();
+    }//GEN-LAST:event_ButtonRefreshActionPerformed
 
     /**
      * @param args the command line arguments
