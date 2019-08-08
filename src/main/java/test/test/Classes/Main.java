@@ -13,6 +13,7 @@ import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 import org.javalite.common.Util;
 import test.test.Forms.Form;
+import test.test.Forms.PangkatGol;
 import test.test.Models.KenaikanPangkatModel;
 /**
  *
