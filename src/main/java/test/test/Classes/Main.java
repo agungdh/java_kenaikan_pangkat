@@ -14,6 +14,7 @@ import org.javalite.activejdbc.Model;
 import org.javalite.common.Util;
 import test.test.Forms.Form;
 import test.test.Forms.PangkatGol;
+import test.test.Forms.Pegawai;
 import test.test.Models.KenaikanPangkatModel;
 /**
  *
@@ -22,6 +23,6 @@ import test.test.Models.KenaikanPangkatModel;
 public class Main {
     public static void main(String args[]) {
 //        new Form().setVisible(true);
-        new PangkatGol().setVisible(true);
+        new Pegawai().setVisible(true);
     }
 }

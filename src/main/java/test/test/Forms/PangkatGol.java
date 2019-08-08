@@ -162,7 +162,7 @@ public class PangkatGol extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel5.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jLabel5.setText("INPUT DATA PEGAWAI");
+        jLabel5.setText("INPUT DATA PANGKAT");
 
         LabelPangkatGol.setText("Pangkat Golongan");
 
@@ -353,6 +353,23 @@ public class PangkatGol extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void ButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRefreshActionPerformed
+        resetForm();
+        loadTable();
+    }//GEN-LAST:event_ButtonRefreshActionPerformed
+
+    private void ButtonHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonHomeActionPerformed
+        new MenuUtama().setVisible(true);
+        
+        this.dispose();
+    }//GEN-LAST:event_ButtonHomeActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        new MenuUtama().setVisible(true);
+        
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
+
     private void ButtonTambahUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTambahUbahActionPerformed
         if (state.equals("index")) {
             if (TextPangkatGol.getText().trim().equals("")) {
@@ -396,23 +413,6 @@ public class PangkatGol extends javax.swing.JFrame {
             setState("edit");
         }
     }//GEN-LAST:event_TablePangkatGolMouseClicked
-
-    private void ButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRefreshActionPerformed
-        resetForm();
-        loadTable();
-    }//GEN-LAST:event_ButtonRefreshActionPerformed
-
-    private void ButtonHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonHomeActionPerformed
-        new MenuUtama().setVisible(true);
-        
-        this.dispose();
-    }//GEN-LAST:event_ButtonHomeActionPerformed
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        new MenuUtama().setVisible(true);
-        
-        this.dispose();
-    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
