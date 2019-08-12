@@ -584,8 +584,8 @@ public class UsulanGaji extends javax.swing.JFrame {
         try{
             Config objkoneksi = new Config();
             Connection con = objkoneksi.bukakoneksi();
-            String fileName="src/main/java/test/test/Reports/usulan_pangkat.jrxml";
-            String filetoFill="src/main/java/test/test/Reports/usulan_pangkat.jasper";
+            String fileName="src/main/java/test/test/Reports/report5.jrxml";
+            String filetoFill="src/main/java/test/test/Reports/report5.jasper";
             JasperCompileManager.compileReport(fileName);
             Map param= new HashMap();
             JasperFillManager.fillReport(filetoFill, param, con);

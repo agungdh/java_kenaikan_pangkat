@@ -12,18 +12,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
@@ -32,6 +39,7 @@ import test.test.Models.KenaikanPangkatModel;
 import test.test.Models.PangkatGolModel;
 import test.test.Models.PegawaiModel;
 import test.test.Models.UsulanModel;
+import test.test.Reports.Config;
 
 /**
  *
@@ -299,6 +307,7 @@ public class KenaikanPangkat extends javax.swing.JFrame {
         TableKenaikanPangkat = new javax.swing.JTable();
         ButtonTambahUbah = new javax.swing.JButton();
         ButtonResetHapus = new javax.swing.JButton();
+        ButtonCetak = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -513,6 +522,13 @@ public class KenaikanPangkat extends javax.swing.JFrame {
             }
         });
 
+        ButtonCetak.setText("Cetak");
+        ButtonCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonCetakActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -528,13 +544,17 @@ public class KenaikanPangkat extends javax.swing.JFrame {
                                 .addGap(164, 164, 164)
                                 .addComponent(ButtonHome))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(ButtonCetak)
+                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(530, 530, 530)))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ButtonResetHapus)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(29, 29, 29))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -551,12 +571,10 @@ public class KenaikanPangkat extends javax.swing.JFrame {
                                 .addGap(107, 107, 107)
                                 .addComponent(jLabel1))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(85, 85, 85)
+                        .addContainerGap()
                         .addComponent(ButtonTambahUbah)
-                        .addGap(28, 28, 28)
-                        .addComponent(ButtonRefresh)
-                        .addGap(36, 36, 36)
-                        .addComponent(ButtonResetHapus)))
+                        .addGap(40, 40, 40)
+                        .addComponent(ButtonRefresh)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -583,9 +601,10 @@ public class KenaikanPangkat extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ButtonResetHapus, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                    .addComponent(ButtonResetHapus)
                     .addComponent(ButtonTambahUbah)
-                    .addComponent(ButtonRefresh))
+                    .addComponent(ButtonRefresh)
+                    .addComponent(ButtonCetak))
                 .addGap(53, 53, 53)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -697,6 +716,23 @@ public class KenaikanPangkat extends javax.swing.JFrame {
         resetForm();
     }//GEN-LAST:event_ButtonResetHapusActionPerformed
 
+    private void ButtonCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCetakActionPerformed
+        try{
+            Config objkoneksi = new Config();
+            Connection con = objkoneksi.bukakoneksi();
+            String fileName="src/main/java/test/test/Reports/kenaikan_pangkat.jrxml";
+            String filetoFill="src/main/java/test/test/Reports/kenaikan_pangkat.jasper";
+            JasperCompileManager.compileReport(fileName);
+            Map param= new HashMap();
+            JasperFillManager.fillReport(filetoFill, param, con);
+            JasperPrint jp=JasperFillManager.fillReport(filetoFill, param,con);
+            JasperViewer.viewReport(jp,false);
+
+        }catch(Exception ex){
+            System.out.println(ex.toString());
+        }
+    }//GEN-LAST:event_ButtonCetakActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -740,6 +776,7 @@ public class KenaikanPangkat extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonCetak;
     private javax.swing.JButton ButtonHome;
     private javax.swing.JButton ButtonRefresh;
     private javax.swing.JButton ButtonResetHapus;
