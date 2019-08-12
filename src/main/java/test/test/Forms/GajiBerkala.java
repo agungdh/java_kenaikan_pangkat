@@ -429,6 +429,11 @@ public class GajiBerkala extends javax.swing.JFrame {
             }
         ));
         TableKenaikanPangkat.getTableHeader().setReorderingAllowed(false);
+        TableKenaikanPangkat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableKenaikanPangkatMouseClicked(evt);
+            }
+        });
         ScrollPane.setViewportView(TableKenaikanPangkat);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -498,11 +503,11 @@ public class GajiBerkala extends javax.swing.JFrame {
                     .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ButtonRefresh)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(ButtonResetHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonTambahUbah)))
+                        .addComponent(ButtonTambahUbah))
+                    .addComponent(ButtonRefresh))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -567,6 +572,30 @@ public class GajiBerkala extends javax.swing.JFrame {
 
         resetForm();
     }//GEN-LAST:event_ButtonResetHapusActionPerformed
+
+    private void TableKenaikanPangkatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableKenaikanPangkatMouseClicked
+        int i =TableKenaikanPangkat.getSelectedRow();
+        if(i>=0){
+            ID = model.getValueAt(i, 0).toString();
+
+            Base.open();
+            GajiBerkalaModel gajiBerkala = GajiBerkalaModel.findById(ID);
+            Base.close();
+            
+//            SpinnerLama.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_lama")));
+//            SpinnerBaru.setValue(Integer.parseInt(gajiBerkala.getString("gaji_pokok_baru")));
+            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(gajiBerkala.getString("id_pegawai"))));
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            
+            try {
+                TMT.setDate(format.parse(gajiBerkala.getString("tmt")));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            
+            setState("edit");
+        }
+    }//GEN-LAST:event_TableKenaikanPangkatMouseClicked
 
     /**
      * @param args the command line arguments
