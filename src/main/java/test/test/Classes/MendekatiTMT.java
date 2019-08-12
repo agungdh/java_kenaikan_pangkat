@@ -109,7 +109,7 @@ public class MendekatiTMT implements TableCellRenderer {
                 c.setForeground(Color.BLACK);
             }
             
-            System.out.println(yangHarusDimerahin.toString());
+//            System.out.println(yangHarusDimerahin.toString());
         } else {
             switch (tipe) {
                 case "kenaikanPangkat":
