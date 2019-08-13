@@ -2,8 +2,8 @@
 --
 -- Host: 127.0.0.1	Database: kenaikan_pangkat
 -- ------------------------------------------------------
--- Server version 	5.5.5-10.3.13-MariaDB-2
--- Date: Mon, 12 Aug 2019 10:12:54 +0700
+-- Server version 	5.5.5-10.3.16-MariaDB
+-- Date: Tue, 13 Aug 2019 06:16:09 +0200
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -15,39 +15,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `usulan`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `usulan` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_pegawai` int(11) NOT NULL,
-  `tipe` enum('gaji','pangkat') NOT NULL,
-  `tanggal` date NOT NULL,
-  `nomor` varchar(25) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `id_pegawai` (`id_pegawai`),
-  CONSTRAINT `usulan_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `usulan`
---
-
-LOCK TABLES `usulan` WRITE;
-/*!40000 ALTER TABLE `usulan` DISABLE KEYS */;
-SET autocommit=0;
-INSERT INTO `usulan` VALUES (4,28,'gaji','2019-08-10','fghjfgj'),(5,29,'gaji','2019-08-09','1241241'),(7,31,'gaji','2019-08-16','pangkat');
-/*!40000 ALTER TABLE `usulan` ENABLE KEYS */;
-UNLOCK TABLES;
-COMMIT;
-
--- Dumped table `usulan` with 3 row(s)
---
 
 --
 -- Table structure for table `admin`
@@ -149,6 +116,34 @@ COMMIT;
 --
 
 --
+-- Table structure for table `pangkatgol`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pangkatgol` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pangkatgol` varchar(191) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pangkatgol`
+--
+
+LOCK TABLES `pangkatgol` WRITE;
+/*!40000 ALTER TABLE `pangkatgol` DISABLE KEYS */;
+SET autocommit=0;
+INSERT INTO `pangkatgol` VALUES (9,'IV/e Pembina Utama'),(10,'IV/d Pembina UtamaMadya'),(11,'IV/c Pembina Utama Muda'),(12,'IV/b Pembina Tingkat I'),(13,'IV/a Pembina'),(14,'III/d Penata Tingkat I'),(15,'III/c Penata'),(16,'III/b Penata Muda Tingkat I'),(17,'III/a Penata Muda'),(18,'II/d Pengatur Tingkat I'),(19,'II/c Pengatur'),(20,'II/b Pengatur Muda Tingkat I'),(21,'II/a Pengatur Muda'),(22,'I/d Juru Tingkat I'),(23,'I/c Juru'),(24,'I/b Juru Muda Tingkat I'),(25,'I/a Juru Muda');
+/*!40000 ALTER TABLE `pangkatgol` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+
+-- Dumped table `pangkatgol` with 17 row(s)
+--
+
+--
 -- Table structure for table `pegawai`
 --
 
@@ -185,31 +180,36 @@ COMMIT;
 --
 
 --
--- Table structure for table `pangkatgol`
+-- Table structure for table `usulan`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pangkatgol` (
+CREATE TABLE `usulan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pangkatgol` varchar(191) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+  `id_pegawai` int(11) NOT NULL,
+  `tipe` enum('gaji','pangkat') NOT NULL,
+  `tanggal` date NOT NULL,
+  `nomor` varchar(25) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_pegawai` (`id_pegawai`),
+  CONSTRAINT `usulan_ibfk_1` FOREIGN KEY (`id_pegawai`) REFERENCES `pegawai` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pangkatgol`
+-- Dumping data for table `usulan`
 --
 
-LOCK TABLES `pangkatgol` WRITE;
-/*!40000 ALTER TABLE `pangkatgol` DISABLE KEYS */;
+LOCK TABLES `usulan` WRITE;
+/*!40000 ALTER TABLE `usulan` DISABLE KEYS */;
 SET autocommit=0;
-INSERT INTO `pangkatgol` VALUES (9,'IV/e Pembina Utama'),(10,'IV/d Pembina UtamaMadya'),(11,'IV/c Pembina Utama Muda'),(12,'IV/b Pembina Tingkat I'),(13,'IV/a Pembina'),(14,'III/d Penata Tingkat I'),(15,'III/c Penata'),(16,'III/b Penata Muda Tingkat I'),(17,'III/a Penata Muda'),(18,'II/d Pengatur Tingkat I'),(19,'II/c Pengatur'),(20,'II/b Pengatur Muda Tingkat I'),(21,'II/a Pengatur Muda'),(22,'I/d Juru Tingkat I'),(23,'I/c Juru'),(24,'I/b Juru Muda Tingkat I'),(25,'I/a Juru Muda');
-/*!40000 ALTER TABLE `pangkatgol` ENABLE KEYS */;
+INSERT INTO `usulan` VALUES (4,28,'gaji','2019-08-10','fghjfgj'),(5,29,'gaji','2019-08-09','1241241'),(7,31,'gaji','2019-08-16','pangkat'),(10,28,'pangkat','2019-08-03','qwrqw qwrqwr');
+/*!40000 ALTER TABLE `usulan` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 
--- Dumped table `pangkatgol` with 17 row(s)
+-- Dumped table `usulan` with 4 row(s)
 --
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -221,4 +221,4 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on: Mon, 12 Aug 2019 10:12:54 +0700
+-- Dump completed on: Tue, 13 Aug 2019 06:16:09 +0200
