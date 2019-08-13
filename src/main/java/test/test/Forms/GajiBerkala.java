@@ -12,18 +12,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
@@ -32,6 +39,7 @@ import test.test.Models.GajiBerkalaModel;
 import test.test.Models.PangkatGolModel;
 import test.test.Models.PegawaiModel;
 import test.test.Models.UsulanModel;
+import test.test.Reports.Config;
 
 /**
  *
@@ -266,6 +274,7 @@ public class GajiBerkala extends javax.swing.JFrame {
         ButtonResetHapus = new javax.swing.JButton();
         ScrollPane = new javax.swing.JScrollPane();
         TableKenaikanPangkat = new javax.swing.JTable();
+        ButtonCetak = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -436,6 +445,13 @@ public class GajiBerkala extends javax.swing.JFrame {
         });
         ScrollPane.setViewportView(TableKenaikanPangkat);
 
+        ButtonCetak.setText("Cetak");
+        ButtonCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonCetakActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -453,12 +469,13 @@ public class GajiBerkala extends javax.swing.JFrame {
                         .addGap(164, 164, 164)
                         .addComponent(ButtonHome))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
                         .addComponent(ButtonTambahUbah)
-                        .addGap(37, 37, 37)
+                        .addGap(45, 45, 45)
                         .addComponent(ButtonRefresh)
-                        .addGap(46, 46, 46)
+                        .addGap(68, 68, 68)
                         .addComponent(ButtonResetHapus)
+                        .addGap(58, 58, 58)
+                        .addComponent(ButtonCetak)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -506,8 +523,10 @@ public class GajiBerkala extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(ButtonResetHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonTambahUbah))
-                    .addComponent(ButtonRefresh))
+                        .addComponent(ButtonCetak))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(ButtonRefresh)
+                        .addComponent(ButtonTambahUbah)))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -597,6 +616,23 @@ public class GajiBerkala extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_TableKenaikanPangkatMouseClicked
 
+    private void ButtonCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCetakActionPerformed
+        try{
+            Config objkoneksi = new Config();
+            Connection con = objkoneksi.bukakoneksi();
+            String fileName="src/main/java/test/test/Reports/gaji_berkala.jrxml";
+            String filetoFill="src/main/java/test/test/Reports/gaji_berkala.jasper";
+            JasperCompileManager.compileReport(fileName);
+            Map param= new HashMap();
+            JasperFillManager.fillReport(filetoFill, param, con);
+            JasperPrint jp=JasperFillManager.fillReport(filetoFill, param,con);
+            JasperViewer.viewReport(jp,false);
+
+        }catch(Exception ex){
+            System.out.println(ex.toString());
+        }
+    }//GEN-LAST:event_ButtonCetakActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -640,6 +676,7 @@ public class GajiBerkala extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonCetak;
     private javax.swing.JButton ButtonHome;
     private javax.swing.JButton ButtonRefresh;
     private javax.swing.JButton ButtonResetHapus;
