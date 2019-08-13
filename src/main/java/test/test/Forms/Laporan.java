@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JSpinner;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -37,6 +38,8 @@ public class Laporan extends javax.swing.JFrame {
         Logo.setIcon(image);
         
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        
+        tahun.setEditor( new JSpinner.NumberEditor( tahun, "#" ) );
     }
 
     /**
