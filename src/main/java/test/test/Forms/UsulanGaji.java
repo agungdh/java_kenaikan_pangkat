@@ -237,7 +237,6 @@ public class UsulanGaji extends javax.swing.JFrame {
         TableKenaikanPangkat = new javax.swing.JTable();
         ButtonResetHapus = new javax.swing.JButton();
         ButtonTambahUbah = new javax.swing.JButton();
-        ButtonCetak = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -405,38 +404,26 @@ public class UsulanGaji extends javax.swing.JFrame {
             }
         });
 
-        ButtonCetak.setText("Cetak");
-        ButtonCetak.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonCetakActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addGap(164, 164, 164)
                         .addComponent(ButtonHome))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(ButtonTambahUbah)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(ButtonResetHapus)
-                                .addGap(43, 43, 43)
-                                .addComponent(ButtonCetak)))
-                        .addGap(18, 18, 18)
+                                .addGap(20, 20, 20)
+                                .addComponent(ButtonTambahUbah))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                         .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 5, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(149, 149, 149)
@@ -455,7 +442,11 @@ public class UsulanGaji extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ButtonRefresh)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(ButtonRefresh)
+                        .addGap(99, 99, 99)
+                        .addComponent(ButtonResetHapus)
+                        .addGap(386, 386, 386))
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29))
         );
@@ -485,7 +476,6 @@ public class UsulanGaji extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ButtonResetHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(ButtonTambahUbah)
-                            .addComponent(ButtonCetak)
                             .addComponent(ButtonRefresh)))
                     .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
@@ -580,23 +570,6 @@ public class UsulanGaji extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ButtonTambahUbahActionPerformed
 
-    private void ButtonCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCetakActionPerformed
-        try{
-            Config objkoneksi = new Config();
-            Connection con = objkoneksi.bukakoneksi();
-            String fileName="src/main/java/test/test/Reports/report5.jrxml";
-            String filetoFill="src/main/java/test/test/Reports/report5.jasper";
-            JasperCompileManager.compileReport(fileName);
-            Map param= new HashMap();
-            JasperFillManager.fillReport(filetoFill, param, con);
-            JasperPrint jp=JasperFillManager.fillReport(filetoFill, param,con);
-            JasperViewer.viewReport(jp,false);
- 
-        }catch(Exception ex){
-               System.out.println(ex.toString());
-        }
-    }//GEN-LAST:event_ButtonCetakActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -640,7 +613,6 @@ public class UsulanGaji extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ButtonCetak;
     private javax.swing.JButton ButtonHome;
     private javax.swing.JButton ButtonRefresh;
     private javax.swing.JButton ButtonResetHapus;
