@@ -27,14 +27,14 @@ public class MenuUtama extends javax.swing.JFrame {
         ImageIcon image = new ImageIcon(newImg);
         Logo.setIcon(image);
         
-        path = "src/main/resources/assets/logometro.png";
+        path = "src/main/resources/assets/2017-02-11.jpg";
         MyImage = new ImageIcon(path);
         img = MyImage.getImage();
         newImg = img.getScaledInstance(Gambar.getWidth(), Gambar.getHeight(), Image.SCALE_SMOOTH);
         image = new ImageIcon(newImg);
         Gambar.setIcon(image);
      
-        path = "src/main/resources/assets/logometro.png";
+        path = "src/main/resources/assets/kisspng-person-logo-computer-icons-5af2c2029ca2b1.9101275115258588186416.png";
         MyImage = new ImageIcon(path);
         img = MyImage.getImage();
         newImg = img.getScaledInstance(Foto.getWidth(), Foto.getHeight(), Image.SCALE_SMOOTH);
