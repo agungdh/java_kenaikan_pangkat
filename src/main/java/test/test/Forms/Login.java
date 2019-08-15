@@ -5,10 +5,22 @@
  */
 package test.test.Forms;
 
+import java.awt.Color;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.DB;
+import org.javalite.activejdbc.LazyList;
+import org.joda.time.DateTime;
+import org.joda.time.Months;
 import test.test.Models.AdminModel;
+import test.test.Models.PegawaiModel;
 
 /**
  *
@@ -16,13 +28,104 @@ import test.test.Models.AdminModel;
  */
 public class Login extends javax.swing.JFrame {
 
+    public Object mdl;
+    
     /**
      * Creates new form Logina
      */
     public Login() {
+        Base.open();
+        this.mdl = PegawaiModel.findAll();
+        Base.close();
+        
         initComponents();
+        
+        notif();
     }
 
+    public void notif() {
+        int i = 0;
+        List<Integer> yangHarusDimerahin = new ArrayList<Integer>();
+        List<Map> results;
+        List<Map> dummyData;
+        List<String> IDCheck = new ArrayList<String>();
+    
+        //                Gaji Berkala
+            Base.open();
+            results = new DB().all("SELECT DISTINCT(id_pegawai) FROM gaji_berkala");
+            Base.close();
+
+            for (Map result : results) {
+                Base.open();
+                dummyData = new DB().all("SELECT * FROM gaji_berkala WHERE id_pegawai = ? ORDER BY yad desc LIMIT 1", result.get("id_pegawai"));
+                Base.close();
+                IDCheck.add(dummyData.get(0).get("id_pegawai").toString());
+            }
+            
+            Base.open();
+            for (PegawaiModel data : (LazyList<PegawaiModel>) this.mdl) {
+                if (IDCheck.contains(data.getString("id")) && cekDeadline(data.getString("yad_gaji"))) {
+                    yangHarusDimerahin.add(Integer.parseInt(data.get("id").toString()));
+                }
+
+                i++;
+            }
+            Base.close();
+
+            i = 0;
+            
+//                Kenaikan Pangkat
+            Base.open();
+            results = new DB().all("SELECT DISTINCT(id_pegawai) FROM kenaikan_pangkat");
+            Base.close();
+
+            for (Map result : results) {
+                Base.open();
+                dummyData = new DB().all("SELECT * FROM kenaikan_pangkat WHERE id_pegawai = ? ORDER BY yad desc LIMIT 1", result.get("id_pegawai"));
+                Base.close();
+                IDCheck.add(dummyData.get(0).get("id_pegawai").toString());
+            }
+
+            for (PegawaiModel data : (LazyList<PegawaiModel>) this.mdl) {
+                if (IDCheck.contains(data.getString("id")) && cekDeadline(data.getString("yad_pangkat"))) {
+                    yangHarusDimerahin.add(Integer.parseInt(data.get("id").toString()));
+                }
+
+                i++;
+            }
+            
+            if (yangHarusDimerahin.size() > 0) {
+                JOptionPane.showMessageDialog(null, "Ada " + yangHarusDimerahin.size() + " pegawai yang harus segera diusulkan");
+            }
+    }
+    
+     public boolean cekDeadline(String dateStop) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+
+        Date d1 = null;
+        Date d2 = null;
+
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            d1 = cal.getTime();
+            d2 = format.parse(dateStop);
+
+            DateTime dt1 = new DateTime(d1);
+            DateTime dt2 = new DateTime(d2);
+
+            if (Months.monthsBetween(dt1, dt2).getMonths() <= 3) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
