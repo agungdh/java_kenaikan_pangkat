@@ -519,26 +519,26 @@ public class UsulanGaji extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void TableKenaikanPangkatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableKenaikanPangkatMouseClicked
-//        int i =TableKenaikanPangkat.getSelectedRow();
-//        if(i>=0){
-//            ID = model.getValueAt(i, 0).toString();
-//
-//            Base.open();
-//            UsulanModel usulan = UsulanModel.findById(ID);
-//            Base.close();
-//
-//            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(usulan.getString("id_pegawai"))));
-//            TextNomor.setText(usulan.getString("nomor"));
-//            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//
-//            try {
-//                Tanggal.setDate(format.parse(usulan.getString("tanggal")));
-//            } catch (Exception e) {
-//                JOptionPane.showMessageDialog(null, e.getMessage());
-//            }
-//
-//            setState("edit");
-//        }
+        int i =TableKenaikanPangkat.getSelectedRow();
+        if(i>=0){
+            ID = model.getValueAt(i, 0).toString();
+
+            Base.open();
+            UsulanModel usulan = UsulanModel.findById(ID);
+            Base.close();
+
+            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(usulan.getString("id_pegawai"))));
+            TextNomor.setText(usulan.getString("nomor"));
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+            try {
+                Tanggal.setDate(format.parse(usulan.getString("tanggal")));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+
+            setState("edit");
+        }
     }//GEN-LAST:event_TableKenaikanPangkatMouseClicked
 
     private void ComboPegawaiItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ComboPegawaiItemStateChanged
@@ -593,14 +593,26 @@ public class UsulanGaji extends javax.swing.JFrame {
                  List<String> paramIn_raw = new ArrayList<String>();
                  for (int i = 0; i < selectedrows.length; i++)
                 {
-//                    paramIn += TableKenaikanPangkat.getValueAt(selectedrows[i], 0).toString();
                     paramIn_raw.add(TableKenaikanPangkat.getValueAt(selectedrows[i], 0).toString());
                 }
                 String paramIn = String.join(",", paramIn_raw);
-                
-                 System.out.println(paramIn);
-                 System.out.println(selectedrows.length);
+                                 
+                 try{
+                    Config objkoneksi = new Config();
+                    Connection con = objkoneksi.bukakoneksi();
+                    String fileName="src/main/java/test/test/Reports/usulan_gaji_potrait.jrxml";
+                    String filetoFill="src/main/java/test/test/Reports/usulan_gaji_potrait.jasper";
+                    JasperCompileManager.compileReport(fileName);
+                    Map param= new HashMap();
+                    param.put("jumlahberkas", selectedrows.length);
+                    param.put("paramid", paramIn);
+                    JasperFillManager.fillReport(filetoFill, param, con);
+                    JasperPrint jp=JasperFillManager.fillReport(filetoFill, param,con);
+                    JasperViewer.viewReport(jp,false);
 
+                }catch(Exception ex){
+                    System.out.println(ex.toString());
+                }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

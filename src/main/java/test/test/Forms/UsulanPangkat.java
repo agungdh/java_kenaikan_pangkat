@@ -9,23 +9,32 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
 import test.test.Models.PangkatGolModel;
 import test.test.Models.PegawaiModel;
 import test.test.Models.UsulanModel;
+import test.test.Reports.Config;
 
 /**
  *
@@ -70,6 +79,9 @@ public class UsulanPangkat extends javax.swing.JFrame {
         });
         
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        
+        TableKenaikanPangkat.setRowSelectionAllowed(true);
+        TableKenaikanPangkat.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
     
     public void loadComboBox() {
@@ -229,6 +241,7 @@ public class UsulanPangkat extends javax.swing.JFrame {
         TableKenaikanPangkat = new javax.swing.JTable();
         ButtonResetHapus = new javax.swing.JButton();
         ButtonTambahUbah = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -396,6 +409,13 @@ public class UsulanPangkat extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Cetak");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -423,7 +443,7 @@ public class UsulanPangkat extends javax.swing.JFrame {
                         .addGap(164, 164, 164)
                         .addComponent(ButtonHome))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(73, 73, 73)
@@ -431,7 +451,9 @@ public class UsulanPangkat extends javax.swing.JFrame {
                                 .addGap(34, 34, 34)
                                 .addComponent(ButtonRefresh)
                                 .addGap(30, 30, 30)
-                                .addComponent(ButtonResetHapus)))
+                                .addComponent(ButtonResetHapus)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1)))
                         .addGap(18, 18, 18)
                         .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -464,7 +486,8 @@ public class UsulanPangkat extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(ButtonResetHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(ButtonTambahUbah))
+                                .addComponent(ButtonTambahUbah)
+                                .addComponent(jButton1))
                             .addComponent(ButtonRefresh)))
                     .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
@@ -559,6 +582,37 @@ public class UsulanPangkat extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ButtonTambahUbahActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (TableKenaikanPangkat.getSelectedRowCount() > -1) {
+
+            int[] selectedrows = TableKenaikanPangkat.getSelectedRows();
+
+            List<String> paramIn_raw = new ArrayList<String>();
+            for (int i = 0; i < selectedrows.length; i++)
+            {
+                paramIn_raw.add(TableKenaikanPangkat.getValueAt(selectedrows[i], 0).toString());
+            }
+            String paramIn = String.join(",", paramIn_raw);
+
+            try{
+                Config objkoneksi = new Config();
+                Connection con = objkoneksi.bukakoneksi();
+                String fileName="src/main/java/test/test/Reports/usulan_pangkat_potrait.jrxml";
+                String filetoFill="src/main/java/test/test/Reports/usulan_pangkat_potrait.jasper";
+                JasperCompileManager.compileReport(fileName);
+                Map param= new HashMap();
+                param.put("jumlahberkas", selectedrows.length);
+                param.put("paramid", paramIn);
+                JasperFillManager.fillReport(filetoFill, param, con);
+                JasperPrint jp=JasperFillManager.fillReport(filetoFill, param,con);
+                JasperViewer.viewReport(jp,false);
+
+            }catch(Exception ex){
+                System.out.println(ex.toString());
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -623,6 +677,7 @@ public class UsulanPangkat extends javax.swing.JFrame {
     private javax.swing.JTable TableKenaikanPangkat;
     private com.toedter.calendar.JDateChooser Tanggal;
     private javax.swing.JTextField TextNomor;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
