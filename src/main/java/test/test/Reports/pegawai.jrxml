@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kenaikan pangkat" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3490c0fd-af31-446b-a29d-8081a76ee146">
-	<property name="ireport.zoom" value="1.100000000000004"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.7715610000000075"/>
+	<property name="ireport.x" value="481"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -81,7 +81,7 @@ WHERE p.id_pangkatgol = pg.id]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="16" splitType="Stretch">
+		<band height="31" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="802" height="1" uuid="5a6920d1-7895-4f73-af0e-1a90c80a07c3"/>
 				<graphicElement>
@@ -99,6 +99,30 @@ WHERE p.id_pangkatgol = pg.id]]>
 			<staticText>
 				<reportElement style="Column header" x="217" y="0" width="133" height="15" forecolor="#000000" uuid="7bc464bd-7e46-4bc5-9c60-56b2ff1b2e18"/>
 				<text><![CDATA[Pangkat Golongan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="389" y="0" width="133" height="15" forecolor="#000000" uuid="0ae4c5d5-5797-4ec7-b71a-8b3b85ec0359"/>
+				<text><![CDATA[Kenaikan Pangkat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="350" y="16" width="91" height="15" forecolor="#000000" uuid="d63678f7-a2d0-472c-b938-403b972292ee"/>
+				<text><![CDATA[TMT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="441" y="15" width="100" height="15" forecolor="#000000" uuid="0c15d55c-4eb2-42e3-9136-1b490d1a72cf"/>
+				<text><![CDATA[YAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="618" y="0" width="133" height="15" forecolor="#000000" uuid="f9e2f3b1-23dc-4f21-92d2-9745aa0169a3"/>
+				<text><![CDATA[Kenaikan Pangkat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="696" y="16" width="106" height="15" forecolor="#000000" uuid="9088f23e-f37c-48e0-bad5-ab013483c757"/>
+				<text><![CDATA[YAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="567" y="15" width="87" height="15" forecolor="#000000" uuid="c883cffc-b23b-4922-81a3-789f2474cde9"/>
+				<text><![CDATA[TMT]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
