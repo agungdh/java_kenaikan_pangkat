@@ -312,6 +312,7 @@ public class Pegawai extends javax.swing.JFrame {
         ButtonResetHapus = new javax.swing.JButton();
         TextCari = new javax.swing.JTextField();
         LabelCari = new javax.swing.JLabel();
+        ButtonCetak = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -556,6 +557,13 @@ public class Pegawai extends javax.swing.JFrame {
 
         LabelCari.setText("Cari (NIP)");
 
+        ButtonCetak.setText("Cetak");
+        ButtonCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonCetakActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -573,13 +581,15 @@ public class Pegawai extends javax.swing.JFrame {
                                     .addComponent(TextCari, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addContainerGap()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                             .addComponent(ButtonTambahUbah)
-                                            .addGap(69, 69, 69)
+                                            .addGap(29, 29, 29)
                                             .addComponent(ButtonRefresh)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(ButtonResetHapus))
+                                            .addGap(28, 28, 28)
+                                            .addComponent(ButtonResetHapus)
+                                            .addGap(31, 31, 31)
+                                            .addComponent(ButtonCetak))
                                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGap(26, 26, 26)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -642,7 +652,8 @@ public class Pegawai extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonRefresh)
                     .addComponent(ButtonTambahUbah)
-                    .addComponent(ButtonResetHapus))
+                    .addComponent(ButtonResetHapus)
+                    .addComponent(ButtonCetak))
                 .addGap(85, 85, 85)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -754,6 +765,23 @@ public class Pegawai extends javax.swing.JFrame {
         cariNIK();
     }//GEN-LAST:event_TextCariActionPerformed
 
+    private void ButtonCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCetakActionPerformed
+        try{
+            Config objkoneksi = new Config();
+            Connection con = objkoneksi.bukakoneksi();
+            String fileName="src/main/java/test/test/Reports/pegawai.jrxml";
+            String filetoFill="src/main/java/test/test/Reports/pegawai.jasper";
+            JasperCompileManager.compileReport(fileName);
+            Map param= new HashMap();
+            JasperFillManager.fillReport(filetoFill, param, con);
+            JasperPrint jp=JasperFillManager.fillReport(filetoFill, param,con);
+            JasperViewer.viewReport(jp,false);
+
+        }catch(Exception ex){
+            System.out.println(ex.toString());
+        }
+    }//GEN-LAST:event_ButtonCetakActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -791,6 +819,7 @@ public class Pegawai extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonCetak;
     private javax.swing.JButton ButtonHome;
     private javax.swing.JButton ButtonRefresh;
     private javax.swing.JButton ButtonResetHapus;
