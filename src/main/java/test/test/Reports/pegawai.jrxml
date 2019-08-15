@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kenaikan pangkat" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3490c0fd-af31-446b-a29d-8081a76ee146">
-	<property name="ireport.zoom" value="1.7715610000000075"/>
-	<property name="ireport.x" value="481"/>
+	<property name="ireport.zoom" value="1.4641000000000062"/>
+	<property name="ireport.x" value="41"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -141,6 +141,14 @@ WHERE p.id_pangkatgol = pg.id]]>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" x="217" y="0" width="133" height="15" uuid="cf1171b0-1c84-4196-9063-6595fd871ca2"/>
 					<textFieldExpression><![CDATA[$F{pangkatgol}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="350" y="0" width="91" height="15" uuid="64ec0695-4544-4567-a6af-856f20aa5140"/>
+					<textFieldExpression><![CDATA[$F{tmt_parsed_pangkat}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="441" y="0" width="91" height="15" uuid="072622d7-8e79-4f83-be67-18eec5a8b2e7"/>
+					<textFieldExpression><![CDATA[$F{yad_parsed_pangkat}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
