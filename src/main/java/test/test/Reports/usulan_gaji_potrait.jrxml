@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="usulan_gaji_potrait" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f2196852-c8c9-4bb6-94b3-1498521b602b">
+	<property name="ireport.zoom" value="1.0000000000000009"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="244"/>
+	<subDataset name="dataset1" uuid="f7578bfe-02fb-4eea-a543-75bf2f34281e"/>
+	<parameter name="jumlahberkas" class="java.lang.String"/>
+	<parameter name="paramid" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT u.*, p.nip, p.nama,
+concat(lpad(day(p.tmt_gaji), 2, 0), '-', lpad(month(p.tmt_gaji), 2, 0), '-', year(p.tmt_gaji)) tmt_parsed
+FROM usulan u, pegawai p
+WHERE u.id_pegawai = p.id
+AND tipe = "gaji"
+AND u.id IN ($P!{paramid})]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_pegawai" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tipe" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tanggal" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nomor" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nip" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tmt_parsed" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="189" y="0" width="197" height="20" uuid="78b3673a-4b12-4b2e-8aa7-abe7a73493c3"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PEMERINTAHAN KOTA METRO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="121" y="20" width="330" height="20" uuid="0b566f3c-0102-4dd7-9092-363873976a43"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DINAS TENAGA KERJA DAN TRANSMIGRASI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="156" y="40" width="273" height="20" uuid="370901c3-bbab-4119-a18f-8e9511dcc616"/>
+				<textElement>
+					<font size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Jl. Jendral Soedirman No. 155 Kota Metro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="211" y="59" width="148" height="20" uuid="aa870874-02da-4f9c-9f3c-fa8d21ec4bf9"/>
+				<textElement>
+					<font size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Telp/Fax (0725) 7850975]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="131" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="292bc0e3-d5ea-47d5-a9c8-912b8345171f"/>
+			</line>
+			<staticText>
+				<reportElement x="386" y="1" width="151" height="20" uuid="26b005df-e6b4-4d53-be0c-318981d3ad94"/>
+				<text><![CDATA[Metro, 05 Desember 2018]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="386" y="21" width="151" height="20" uuid="e4e7073b-7cfc-482f-9fe5-01c7abef01d4"/>
+				<text><![CDATA[Kepada Yth,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="386" y="41" width="151" height="20" uuid="de208402-e58e-44e6-86c6-f74d08eebfd3"/>
+				<text><![CDATA[Walikota Metro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="386" y="61" width="151" height="20" uuid="a5cdbf7c-baa4-478e-88c6-8ac5c095f9e5"/>
+				<text><![CDATA[Cq. Kepala BKPSDM Kota Metro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="386" y="81" width="151" height="20" uuid="1960fcdf-e824-4bba-99a3-2ca641b82967"/>
+				<text><![CDATA[di]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="468" y="101" width="69" height="20" uuid="b655ca3d-0871-4ff0-903b-9707d6306a65"/>
+				<text><![CDATA[Metro]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="102" splitType="Stretch">
+			<staticText>
+				<reportElement x="204" y="0" width="155" height="20" uuid="91ce1501-333e-462f-b9f6-370433fe1b47"/>
+				<textElement>
+					<font size="15" isBold="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[SURAT PENGANTAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="211" y="20" width="155" height="20" uuid="a298e2ac-cf39-4d5a-81fd-7c7fb1dea4b5"/>
+				<textElement>
+					<font size="15" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[No. 80000000000]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="38" y="1" width="100" height="20" uuid="6d3582d4-41c9-417b-9feb-d7a6e24bd4be"/>
+				<text><![CDATA[nip]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="51" y="1" width="100" height="20" uuid="a0625b13-8f51-4cb3-8f86-02797ef8d921"/>
+				<text><![CDATA[nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="51" y="1" width="100" height="20" uuid="72074575-3d39-462b-8a83-6dd6fe817ef0"/>
+				<text><![CDATA[tmt_parsed]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="81" width="138" height="20" uuid="7ca2505d-1573-47e4-a846-83e1896032c6"/>
+				<text><![CDATA[Usulan kenaikan pangkat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="368" y="61" width="100" height="20" uuid="b20731a7-b7dc-4b75-99d7-fc263fb944a7"/>
+				<text><![CDATA[Keterangan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="156" y="61" width="100" height="20" uuid="bc280539-cb8b-4480-8988-b4df8f0b81d2"/>
+				<text><![CDATA[Banyaknya]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="61" width="18" height="20" uuid="9b3e271f-290e-44f3-b81d-eefa8c88c0cb"/>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="61" width="100" height="20" uuid="ad7ce209-91b2-4dda-b624-3b5a7a633f6b"/>
+				<text><![CDATA[Jenis yang dikirim]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="555" height="85" uuid="65ffbbad-ecab-4fa9-a7d9-3b11aaaf535d"/>
+				<textField>
+					<reportElement x="3" y="20" width="100" height="20" uuid="a757a065-9d36-4657-9f4c-8d348b97064f"/>
+					<textFieldExpression><![CDATA[$F{nip}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="3" y="0" width="100" height="20" uuid="e1198191-89bb-46e3-9e2e-94dc5723e106"/>
+					<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="3" y="40" width="100" height="20" uuid="ab640468-6f31-4a6b-b2a2-4e036f321797"/>
+					<textFieldExpression><![CDATA[$F{tmt_parsed}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

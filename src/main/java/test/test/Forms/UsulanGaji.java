@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -78,6 +79,9 @@ public class UsulanGaji extends javax.swing.JFrame {
         });
         
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        
+        TableKenaikanPangkat.setRowSelectionAllowed(true);
+        TableKenaikanPangkat.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
     
     public void loadComboBox() {
@@ -237,6 +241,7 @@ public class UsulanGaji extends javax.swing.JFrame {
         TableKenaikanPangkat = new javax.swing.JTable();
         ButtonResetHapus = new javax.swing.JButton();
         ButtonTambahUbah = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -404,27 +409,17 @@ public class UsulanGaji extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Cetak");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addGap(164, 164, 164)
-                        .addComponent(ButtonHome))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(ButtonTambahUbah))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                        .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 5, Short.MAX_VALUE)))
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(149, 149, 149)
                 .addComponent(Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -439,15 +434,34 @@ public class UsulanGaji extends javax.swing.JFrame {
                         .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(192, Short.MAX_VALUE)
-                .addComponent(ButtonRefresh)
-                .addGap(99, 99, 99)
-                .addComponent(ButtonResetHapus)
-                .addGap(415, 415, 415))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(ButtonTambahUbah)
+                                .addGap(38, 38, 38)
+                                .addComponent(ButtonRefresh)
+                                .addGap(43, 43, 43)
+                                .addComponent(ButtonResetHapus)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1)
+                                .addGap(26, 26, 26)))
+                        .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel4)
+                                .addGap(164, 164, 164)
+                                .addComponent(ButtonHome))
+                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -476,7 +490,8 @@ public class UsulanGaji extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ButtonResetHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(ButtonTambahUbah)
-                            .addComponent(ButtonRefresh)))
+                            .addComponent(ButtonRefresh)
+                            .addComponent(jButton1)))
                     .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -504,26 +519,26 @@ public class UsulanGaji extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void TableKenaikanPangkatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableKenaikanPangkatMouseClicked
-        int i =TableKenaikanPangkat.getSelectedRow();
-        if(i>=0){
-            ID = model.getValueAt(i, 0).toString();
-
-            Base.open();
-            UsulanModel usulan = UsulanModel.findById(ID);
-            Base.close();
-
-            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(usulan.getString("id_pegawai"))));
-            TextNomor.setText(usulan.getString("nomor"));
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-            try {
-                Tanggal.setDate(format.parse(usulan.getString("tanggal")));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-
-            setState("edit");
-        }
+//        int i =TableKenaikanPangkat.getSelectedRow();
+//        if(i>=0){
+//            ID = model.getValueAt(i, 0).toString();
+//
+//            Base.open();
+//            UsulanModel usulan = UsulanModel.findById(ID);
+//            Base.close();
+//
+//            ComboPegawai.setSelectedIndex(comboPegawaiID.indexOf(Integer.parseInt(usulan.getString("id_pegawai"))));
+//            TextNomor.setText(usulan.getString("nomor"));
+//            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//
+//            try {
+//                Tanggal.setDate(format.parse(usulan.getString("tanggal")));
+//            } catch (Exception e) {
+//                JOptionPane.showMessageDialog(null, e.getMessage());
+//            }
+//
+//            setState("edit");
+//        }
     }//GEN-LAST:event_TableKenaikanPangkatMouseClicked
 
     private void ComboPegawaiItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ComboPegawaiItemStateChanged
@@ -569,6 +584,25 @@ public class UsulanGaji extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_ButtonTambahUbahActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (TableKenaikanPangkat.getSelectedRowCount() > -1) {
+
+                 int[] selectedrows = TableKenaikanPangkat.getSelectedRows();
+
+                 List<String> paramIn_raw = new ArrayList<String>();
+                 for (int i = 0; i < selectedrows.length; i++)
+                {
+//                    paramIn += TableKenaikanPangkat.getValueAt(selectedrows[i], 0).toString();
+                    paramIn_raw.add(TableKenaikanPangkat.getValueAt(selectedrows[i], 0).toString());
+                }
+                String paramIn = String.join(",", paramIn_raw);
+                
+                 System.out.println(paramIn);
+                 System.out.println(selectedrows.length);
+
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -626,6 +660,7 @@ public class UsulanGaji extends javax.swing.JFrame {
     private javax.swing.JTable TableKenaikanPangkat;
     private com.toedter.calendar.JDateChooser Tanggal;
     private javax.swing.JTextField TextNomor;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
