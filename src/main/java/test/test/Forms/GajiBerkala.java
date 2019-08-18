@@ -36,6 +36,7 @@ import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
 import test.test.Classes.MendekatiTMT;
 import test.test.Models.GajiBerkalaModel;
+import test.test.Models.KenaikanPangkatModel;
 import test.test.Models.PangkatGolModel;
 import test.test.Models.PegawaiModel;
 import test.test.Models.UsulanModel;
@@ -113,11 +114,23 @@ public class GajiBerkala extends javax.swing.JFrame {
     }
     
     private void loadTable() {
-        model = new DefaultTableModel();
-        
         Base.open();
         LazyList<GajiBerkalaModel> gajiBerkalas = GajiBerkalaModel.findAll();
         Base.close();
+        
+        loadTableHelper(gajiBerkalas);
+    }
+
+    private void loadTable(String cariNIP) {
+        Base.open();
+        LazyList<GajiBerkalaModel> gajiBerkalas = GajiBerkalaModel.findBySQL("SELECT gb.*, p.nip, p.nama FROM gaji_berkala gb, pegawai p WHERE gb.id_pegawai = p.id AND (p.nip like ? OR p.nama like ?)", '%' + cariNIP + '%', '%' + cariNIP + '%');
+        Base.close();
+        
+        loadTableHelper(gajiBerkalas);
+    }
+    
+    private void loadTableHelper(LazyList<GajiBerkalaModel> gajiBerkalas) {
+        model = new DefaultTableModel();
         
         model.addColumn("#ID");
         model.addColumn("NIP");
@@ -275,6 +288,8 @@ public class GajiBerkala extends javax.swing.JFrame {
         ScrollPane = new javax.swing.JScrollPane();
         TableKenaikanPangkat = new javax.swing.JTable();
         ButtonCetak = new javax.swing.JButton();
+        TextCari = new javax.swing.JTextField();
+        LabelCari = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -452,6 +467,14 @@ public class GajiBerkala extends javax.swing.JFrame {
             }
         });
 
+        TextCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextCariActionPerformed(evt);
+            }
+        });
+
+        LabelCari.setText("Cari (NIP / Nama)");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -485,7 +508,13 @@ public class GajiBerkala extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ScrollPane))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ScrollPane)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(LabelCari)
+                                .addGap(18, 18, 18)
+                                .addComponent(TextCari, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -515,9 +544,14 @@ public class GajiBerkala extends javax.swing.JFrame {
                     .addComponent(ButtonHome)
                     .addComponent(jLabel4))
                 .addGap(44, 44, 44)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(TextCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(LabelCari))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -632,6 +666,14 @@ public class GajiBerkala extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ButtonCetakActionPerformed
 
+    private void TextCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextCariActionPerformed
+        if (TextCari.getText().equals("")) {
+            loadTable();
+        } else {
+            loadTable(TextCari.getText());
+        }
+    }//GEN-LAST:event_TextCariActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -681,6 +723,7 @@ public class GajiBerkala extends javax.swing.JFrame {
     private javax.swing.JButton ButtonResetHapus;
     private javax.swing.JButton ButtonTambahUbah;
     private javax.swing.JComboBox<String> ComboPegawai;
+    private javax.swing.JLabel LabelCari;
     private javax.swing.JLabel LabelPangkatGol;
     private javax.swing.JLabel LabelPangkatGol3;
     private javax.swing.JLabel LabelPangkatGol4;
@@ -688,6 +731,7 @@ public class GajiBerkala extends javax.swing.JFrame {
     private javax.swing.JScrollPane ScrollPane;
     private com.toedter.calendar.JDateChooser TMT;
     private javax.swing.JTable TableKenaikanPangkat;
+    private javax.swing.JTextField TextCari;
     private javax.swing.JTextField YAD;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

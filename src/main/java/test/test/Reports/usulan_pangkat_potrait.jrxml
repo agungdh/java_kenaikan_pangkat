@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="usulan_gaji_potrait" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f2196852-c8c9-4bb6-94b3-1498521b602b">
-	<property name="ireport.zoom" value="1.6105100000000019"/>
+	<property name="ireport.zoom" value="1.2100000000000017"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="419"/>
+	<property name="ireport.y" value="200"/>
 	<subDataset name="dataset1" uuid="f7578bfe-02fb-4eea-a543-75bf2f34281e"/>
 	<parameter name="jumlahberkas" class="java.lang.String"/>
 	<parameter name="paramid" class="java.lang.String"/>
@@ -104,6 +104,18 @@ AND u.id IN ($P!{paramid})]]>
 	</pageHeader>
 	<columnHeader>
 		<band height="104" splitType="Stretch">
+			<rectangle>
+				<reportElement x="417" y="81" width="138" height="23" uuid="4c5908d1-1ff5-4f0a-ae61-25ee213c59a9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="256" y="81" width="161" height="23" uuid="92e5047a-ef06-4f82-afb0-1cb38a1071ec"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="81" width="18" height="23" uuid="d539fc23-7618-467f-8344-16af3140a414"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="18" y="81" width="238" height="23" uuid="f8126829-b26a-4148-8ec6-b5e7eda523ee"/>
+			</rectangle>
 			<staticText>
 				<reportElement x="204" y="0" width="155" height="20" uuid="91ce1501-333e-462f-b9f6-370433fe1b47"/>
 				<textElement>
@@ -176,6 +188,12 @@ AND u.id IN ($P!{paramid})]]>
 		<band height="61" splitType="Stretch">
 			<frame>
 				<reportElement x="0" y="0" width="555" height="61" uuid="65ffbbad-ecab-4fa9-a7d9-3b11aaaf535d"/>
+				<rectangle>
+					<reportElement x="0" y="0" width="18" height="61" uuid="f988af64-7480-4b1e-9264-ead658583883"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="18" y="0" width="238" height="61" uuid="fe48884c-af2e-4ebe-bbfd-6034da011eb2"/>
+				</rectangle>
 				<textField>
 					<reportElement x="25" y="20" width="100" height="20" uuid="a757a065-9d36-4657-9f4c-8d348b97064f"/>
 					<textFieldExpression><![CDATA["NIP. " + $F{nip}]]></textFieldExpression>
@@ -192,6 +210,12 @@ AND u.id IN ($P!{paramid})]]>
 					<reportElement x="0" y="0" width="18" height="20" uuid="5cd39192-f13d-4c91-9bc6-070ce8bff296"/>
 					<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
 				</textField>
+				<rectangle>
+					<reportElement x="256" y="0" width="161" height="61" uuid="d74afd9d-3bc2-490a-84f5-6946b5b4d578"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="417" y="0" width="138" height="61" uuid="47fb00e6-f86f-4ef7-b746-a3f9eb101c09"/>
+				</rectangle>
 			</frame>
 		</band>
 	</detail>

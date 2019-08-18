@@ -135,12 +135,24 @@ public class KenaikanPangkat extends javax.swing.JFrame {
     }
     
     private void loadTable() {
-        model = new DefaultTableModel();
-        
         Base.open();
         LazyList<KenaikanPangkatModel> kenaikanPangkats = KenaikanPangkatModel.findAll();
         Base.close();
         
+        loadTableHelper(kenaikanPangkats);
+    }
+
+    private void loadTable(String cariNIP) {
+        Base.open();
+        LazyList<KenaikanPangkatModel> kenaikanPangkats = KenaikanPangkatModel.findBySQL("SELECT kp.*, p.nip, p.nama FROM kenaikan_pangkat kp, pegawai p WHERE kp.id_pegawai = p.id AND (p.nip like ? OR p.nama like ?)", '%' + cariNIP + '%', '%' + cariNIP + '%');
+        Base.close();
+        
+        loadTableHelper(kenaikanPangkats);
+    }
+
+    private void loadTableHelper(LazyList<KenaikanPangkatModel> kenaikanPangkats) {
+        model = new DefaultTableModel();
+                
         model.addColumn("#ID");
         model.addColumn("NIP");
         model.addColumn("Nama");
@@ -308,6 +320,8 @@ public class KenaikanPangkat extends javax.swing.JFrame {
         ButtonTambahUbah = new javax.swing.JButton();
         ButtonResetHapus = new javax.swing.JButton();
         ButtonCetak = new javax.swing.JButton();
+        TextCari = new javax.swing.JTextField();
+        LabelCari = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -529,6 +543,14 @@ public class KenaikanPangkat extends javax.swing.JFrame {
             }
         });
 
+        TextCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextCariActionPerformed(evt);
+            }
+        });
+
+        LabelCari.setText("Cari (NIP / Nama)");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -547,15 +569,11 @@ public class KenaikanPangkat extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(ButtonCetak)
                                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(530, 530, 530)))
+                                .addGap(521, 521, 521)))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ButtonResetHapus)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(169, 169, 169)
-                                .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(29, 29, 29))))
+                        .addComponent(ButtonResetHapus)
+                        .addGap(631, 631, 631))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -582,6 +600,16 @@ public class KenaikanPangkat extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(402, 402, 402)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(LabelCari)
+                        .addGap(18, 18, 18)
+                        .addComponent(TextCari, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26))
+                    .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -602,10 +630,15 @@ public class KenaikanPangkat extends javax.swing.JFrame {
                     .addComponent(ButtonHome)
                     .addComponent(jLabel4))
                 .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(TextCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(LabelCari))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonResetHapus)
                     .addComponent(ButtonTambahUbah)
@@ -739,6 +772,16 @@ public class KenaikanPangkat extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ButtonCetakActionPerformed
 
+    private void TextCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextCariActionPerformed
+        if (TextCari.getText().equals("")) {
+            loadTable();
+        } else {
+            loadTable(TextCari.getText());
+        }
+    }//GEN-LAST:event_TextCariActionPerformed
+
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -790,6 +833,7 @@ public class KenaikanPangkat extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> ComboPangkatGolBaru;
     private javax.swing.JComboBox<String> ComboPangkatGolLama;
     private javax.swing.JComboBox<String> ComboPegawai;
+    private javax.swing.JLabel LabelCari;
     private javax.swing.JLabel LabelPangkatGol;
     private javax.swing.JLabel LabelPangkatGol1;
     private javax.swing.JLabel LabelPangkatGol2;
@@ -799,6 +843,7 @@ public class KenaikanPangkat extends javax.swing.JFrame {
     private javax.swing.JScrollPane ScrollPane;
     private com.toedter.calendar.JDateChooser TMT;
     private javax.swing.JTable TableKenaikanPangkat;
+    private javax.swing.JTextField TextCari;
     private javax.swing.JTextField YAD;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
