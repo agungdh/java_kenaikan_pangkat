@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="usulan_gaji_potrait" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f2196852-c8c9-4bb6-94b3-1498521b602b">
-	<property name="ireport.zoom" value="1.2100000000000017"/>
+	<property name="ireport.zoom" value="1.331000000000002"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="200"/>
+	<property name="ireport.y" value="19"/>
 	<subDataset name="dataset1" uuid="f7578bfe-02fb-4eea-a543-75bf2f34281e"/>
 	<parameter name="jumlahberkas" class="java.lang.String"/>
 	<parameter name="paramid" class="java.lang.String"/>
+	<parameter name="tanggal" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT u.*, p.nip, p.nama,
 concat(lpad(day(p.tmt_pangkat), 2, 0), '-', lpad(month(p.tmt_pangkat), 2, 0), '-', year(p.tmt_pangkat)) tmt_parsed
@@ -77,8 +78,8 @@ AND u.id IN ($P!{paramid})]]>
 				<reportElement x="0" y="0" width="555" height="1" uuid="292bc0e3-d5ea-47d5-a9c8-912b8345171f"/>
 			</line>
 			<staticText>
-				<reportElement x="386" y="1" width="151" height="20" uuid="26b005df-e6b4-4d53-be0c-318981d3ad94"/>
-				<text><![CDATA[Metro, 05 Desember 2018]]></text>
+				<reportElement x="386" y="1" width="31" height="20" uuid="26b005df-e6b4-4d53-be0c-318981d3ad94"/>
+				<text><![CDATA[Metro, ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="386" y="21" width="151" height="20" uuid="e4e7073b-7cfc-482f-9fe5-01c7abef01d4"/>
@@ -100,6 +101,10 @@ AND u.id IN ($P!{paramid})]]>
 				<reportElement x="468" y="101" width="69" height="20" uuid="b655ca3d-0871-4ff0-903b-9707d6306a65"/>
 				<text><![CDATA[Metro]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="417" y="1" width="138" height="20" uuid="f38bcc31-1ef5-4121-a9fd-1f7dbaca4b04"/>
+				<textFieldExpression><![CDATA[$P{tanggal}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

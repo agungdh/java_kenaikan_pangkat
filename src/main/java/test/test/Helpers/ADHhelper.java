@@ -6,6 +6,8 @@
 package test.test.Helpers;
 
 import static java.lang.System.out;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -24,6 +26,19 @@ public class ADHhelper {
         out.println("===========================================");
         out.println(string);
         out.println("===========================================");
+    }
+    
+    public static String parseTanggalIndoString(Date tanggalParam) {
+        SimpleDateFormat formatHari =new SimpleDateFormat("dd");
+        SimpleDateFormat formatTahun =new SimpleDateFormat("yyyy");
+        SimpleDateFormat formatBulan =new SimpleDateFormat("MM");
+
+        String hari = formatHari.format(tanggalParam); 
+        String bulan = ADHhelper.bulan(Integer.parseInt(formatBulan.format(tanggalParam)));
+        String tahun = formatTahun.format(tanggalParam);
+        String tanggal = hari + " " + bulan + " " + tahun;
+        
+        return tanggal;
     }
     
     public static String bulan(int i) {

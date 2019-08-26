@@ -55,25 +55,12 @@ public class MendekatiTMT implements TableCellRenderer {
 
         int i = 0;
         List<Integer> yangHarusDimerahin = new ArrayList<Integer>();
-        List<Map> results;
-        List<Map> dummyData;
         List<String> IDCheck = new ArrayList<String>();
 
         if (this.tipe == "pegawai") {
 //                Gaji Berkala
-            Base.open();
-            results = new DB().all("SELECT DISTINCT(id_pegawai) FROM gaji_berkala");
-            Base.close();
-
-            for (Map result : results) {
-                Base.open();
-                dummyData = new DB().all("SELECT * FROM gaji_berkala WHERE id_pegawai = ? ORDER BY yad desc LIMIT 1", result.get("id_pegawai"));
-                Base.close();
-                IDCheck.add(dummyData.get(0).get("id_pegawai").toString());
-            }
-
             for (PegawaiModel data : (LazyList<PegawaiModel>) this.mdl) {
-                if (IDCheck.contains(data.getString("id")) && cekDeadline(data.getString("yad_gaji"))) {
+                if (cekDeadline(data.getString("yad_gaji"))) {
                     yangHarusDimerahin.add(i);
                 }
 
@@ -83,19 +70,8 @@ public class MendekatiTMT implements TableCellRenderer {
             i = 0;
             
 //                Kenaikan Pangkat
-            Base.open();
-            results = new DB().all("SELECT DISTINCT(id_pegawai) FROM kenaikan_pangkat");
-            Base.close();
-
-            for (Map result : results) {
-                Base.open();
-                dummyData = new DB().all("SELECT * FROM kenaikan_pangkat WHERE id_pegawai = ? ORDER BY yad desc LIMIT 1", result.get("id_pegawai"));
-                Base.close();
-                IDCheck.add(dummyData.get(0).get("id_pegawai").toString());
-            }
-
             for (PegawaiModel data : (LazyList<PegawaiModel>) this.mdl) {
-                if (IDCheck.contains(data.getString("id")) && cekDeadline(data.getString("yad_pangkat"))) {
+                if (cekDeadline(data.getString("yad_pangkat"))) {
                     yangHarusDimerahin.add(i);
                 }
 
@@ -113,19 +89,8 @@ public class MendekatiTMT implements TableCellRenderer {
         } else {
             switch (tipe) {
                 case "kenaikanPangkat":
-                    Base.open();
-                    results = new DB().all("SELECT DISTINCT(id_pegawai) FROM kenaikan_pangkat");
-                    Base.close();
-
-                    for (Map result : results) {
-                        Base.open();
-                        dummyData = new DB().all("SELECT * FROM kenaikan_pangkat WHERE id_pegawai = ? ORDER BY yad desc LIMIT 1", result.get("id_pegawai"));
-                        Base.close();
-                        IDCheck.add(dummyData.get(0).get("id").toString());
-                    }
-
                     for (KenaikanPangkatModel data : (LazyList<KenaikanPangkatModel>) this.mdl) {
-                        if (IDCheck.contains(data.getString("id")) && cekDeadline(data.getString("yad"))) {
+                        if (cekDeadline(data.getString("yad"))) {
                             yangHarusDimerahin.add(i);
                         }
 
@@ -140,19 +105,8 @@ public class MendekatiTMT implements TableCellRenderer {
                     }
                     break;
                 case "gajiBerkala":
-                    Base.open();
-                    results = new DB().all("SELECT DISTINCT(id_pegawai) FROM gaji_berkala");
-                    Base.close();
-
-                    for (Map result : results) {
-                        Base.open();
-                        dummyData = new DB().all("SELECT * FROM gaji_berkala WHERE id_pegawai = ? ORDER BY yad desc LIMIT 1", result.get("id_pegawai"));
-                        Base.close();
-                        IDCheck.add(dummyData.get(0).get("id").toString());
-                    }
-
                     for (GajiBerkalaModel data : (LazyList<GajiBerkalaModel>) this.mdl) {
-                        if (IDCheck.contains(data.getString("id")) && cekDeadline(data.getString("yad"))) {
+                        if (cekDeadline(data.getString("yad"))) {
                             yangHarusDimerahin.add(i);
                         }
 

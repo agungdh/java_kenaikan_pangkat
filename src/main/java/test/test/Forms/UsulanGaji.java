@@ -31,6 +31,7 @@ import net.sf.jasperreports.view.JasperViewer;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
+import test.test.Helpers.ADHhelper;
 import test.test.Models.PangkatGolModel;
 import test.test.Models.PegawaiModel;
 import test.test.Models.UsulanModel;
@@ -587,8 +588,7 @@ public class UsulanGaji extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (TableKenaikanPangkat.getSelectedRowCount() > -1) {
-
-                 int[] selectedrows = TableKenaikanPangkat.getSelectedRows();
+                int[] selectedrows = TableKenaikanPangkat.getSelectedRows();
 
                  List<String> paramIn_raw = new ArrayList<String>();
                  for (int i = 0; i < selectedrows.length; i++)
@@ -606,6 +606,7 @@ public class UsulanGaji extends javax.swing.JFrame {
                     Map param= new HashMap();
                     param.put("jumlahberkas", selectedrows.length);
                     param.put("paramid", paramIn);
+                    param.put("tanggal", ADHhelper.parseTanggalIndoString(Tanggal.getDate()));
                     JasperFillManager.fillReport(filetoFill, param, con);
                     JasperPrint jp=JasperFillManager.fillReport(filetoFill, param,con);
                     JasperViewer.viewReport(jp,false);
